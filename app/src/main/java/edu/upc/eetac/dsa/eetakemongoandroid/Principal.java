@@ -13,6 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 //
 import com.google.android.gms.maps.CameraUpdate;
@@ -37,9 +39,10 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 public class Principal extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback {
     private GoogleMap mMap;
     private Marker marker;
+    User user;
     double lat = 41.275603;
     double lon = 1.986584;
     @Override
@@ -66,8 +69,12 @@ public class Principal extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        //SDFGHJDFGHJKDFGHJK
-        //miUbicacion();
+        //LO MIO
+        //llenar();
+        //Map
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
     }
 
     @Override
@@ -125,7 +132,17 @@ public class Principal extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    /*
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        miUbicacion();
+    }
+    private void llenar(){
+        user=new User("Nacho","1234");
+        setContentView(R.layout.nav_header_principal);
+        TextView nombre=(TextView)findViewById(R.id.nombre);
+        nombre.setText(user.getName());
+    }
     private void miUbicacion() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -172,5 +189,5 @@ public class Principal extends AppCompatActivity
         public void onProviderDisabled(String provider) {
 
         }
-    };*/
+    };
 }

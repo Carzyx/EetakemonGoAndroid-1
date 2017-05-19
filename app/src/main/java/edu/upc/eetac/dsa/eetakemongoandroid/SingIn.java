@@ -14,7 +14,7 @@ public class SingIn extends AppCompatActivity {
         //NAME,SURNAME;USERNAME;PASS;EMAIL
     }
     public void singin(View view){
-        Intent intent=new Intent(SingIn.this,Map.class);
+        Intent intent=new Intent(SingIn.this,Principal.class);
         startActivity(intent);
     }
     @Override
