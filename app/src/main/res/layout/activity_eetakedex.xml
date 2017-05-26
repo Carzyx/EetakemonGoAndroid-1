@@ -9,7 +9,7 @@
 
     <ListView
         android:id="@+id/list"
-        android:textColor="#fff"
+        android:textColor="#333333"
         android:textColorHint="#d9e5f3"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

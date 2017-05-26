@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 //
@@ -34,21 +33,28 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
-import android.widget.Toast;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.upc.eetac.dsa.eetakemongoandroid.Model.Eetackemon;
+import edu.upc.eetac.dsa.eetakemongoandroid.Model.User;
 
 public class Principal extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback {
+        implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback,GoogleMap.OnMarkerClickListener {
     private GoogleMap mMap;
     private Marker marker;
-    User user;
+    private List<Marker> markers;
+    private User user;
+    private List<Eetackemon>eetackemonList=new ArrayList<Eetackemon>();
     double lat = 41.275603;
     double lon = 1.986584;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -69,8 +75,7 @@ public class Principal extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        //LO MIO
-        //llenar();
+
         //Map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -83,8 +88,7 @@ public class Principal extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            setResult(RESULT_OK);
-            finish();
+
         }
     }
 
@@ -136,9 +140,11 @@ public class Principal extends AppCompatActivity
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         miUbicacion();
+        mMap.setOnMarkerClickListener(this);
     }
     private void llenar(){
         user=new User("Nacho","1234");
+        //View v=View.inflate()
         setContentView(R.layout.nav_header_principal);
         TextView nombre=(TextView)findViewById(R.id.nombre);
         nombre.setText(user.getName());
@@ -152,11 +158,11 @@ public class Principal extends AppCompatActivity
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         actualizarUbicacion(location);
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,1000,0,locationListener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,10000,0,locationListener);
     }
     private void agregarMarcador(double lat, double lon) {
         LatLng coordenadas = new LatLng(lat, lon);
-        CameraUpdate miUbicacion = CameraUpdateFactory.newLatLngZoom(coordenadas,20);
+        CameraUpdate miUbicacion = CameraUpdateFactory.newLatLngZoom(coordenadas,18);
         if (marker != null) marker.remove();
         marker = mMap.addMarker(new MarkerOptions().position(coordenadas).title("mi posicion").icon(BitmapDescriptorFactory.fromResource(R.drawable.personaje)));
         mMap.animateCamera(miUbicacion);
@@ -167,12 +173,31 @@ public class Principal extends AppCompatActivity
             lat = location.getLatitude();
             lon = location.getLongitude();
             agregarMarcador(lat, lon);
+            añadirEetakemon();
         } else Toast.makeText(this, "No se ha encontrado la ubicacion", Toast.LENGTH_SHORT).show();
+    }
+    private void añadirEetakemon(){
+        //mMap.clear();
+        List<LatLng>listamarkers=new ArrayList<LatLng>();
+        eetackemonList=new ArrayList<Eetackemon>();
+        markers=new ArrayList<Marker>();
+        Eetackemon eetackemon=new Eetackemon("eetakemon1",2,3,EetakemonType.AIRE,"sda","fghjk");
+        eetackemonList.add(eetackemon);
+        LatLng cordenadas=new LatLng(41.275603,1.986584);
+        listamarkers.add(cordenadas);
+        cordenadas=new LatLng(41.275875,1.986381);
+        eetackemon=new Eetackemon("eetakemon",2,3,EetakemonType.AIRE,"sda","fghjk");
+        eetackemonList.add(eetackemon);
+        listamarkers.add(cordenadas);
+        for(int i=0;i<listamarkers.size();i++){
+            Marker marker1=mMap.addMarker(new MarkerOptions().position(listamarkers.get(i)).title(eetackemonList.get(i).getName()));
+            markers.add(marker1);
+        }
     }
     LocationListener locationListener =new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
-
+                actualizarUbicacion(location);
         }
 
         @Override
@@ -190,4 +215,26 @@ public class Principal extends AppCompatActivity
 
         }
     };
+    protected void onActivityResult(int requestCode,int resultCode,Intent intent){
+        super.onActivityResult(requestCode,resultCode,intent);
+        if(requestCode==RESULT_OK)
+            Toast.makeText(this,"Capturado",Toast.LENGTH_SHORT);
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        LatLng mi=this.marker.getPosition();
+        LatLng click=marker.getPosition();
+        if((mi.longitude!=click.longitude)&&(mi.latitude!=click.latitude)){
+            Eetackemon eetackemon=new Eetackemon();
+            for(int i=0;i<markers.size();i++){
+                if(eetackemonList.get(i).getName().equals(marker.getTitle()))
+                    eetackemon=eetackemonList.get(i);
+            }
+        Intent intent=new Intent(getApplicationContext(),Captura.class);
+        intent.putExtra("Eetakemon",(Serializable)eetackemon);
+        startActivityForResult(intent,100);
+        }
+        return false;
+    }
 }

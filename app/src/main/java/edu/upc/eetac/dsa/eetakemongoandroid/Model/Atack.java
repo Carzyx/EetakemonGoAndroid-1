@@ -1,9 +1,13 @@
-package edu.upc.eetac.dsa.eetakemongoandroid;
+package edu.upc.eetac.dsa.eetakemongoandroid.Model;
+
+import java.io.Serializable;
+
+import edu.upc.eetac.dsa.eetakemongoandroid.EetakemonType;
 
 /**
  * Created by Ignacio on 29/04/2017.
  */
-public class Atack {
+public class Atack implements Serializable {
 
     private int id;
     private String name;

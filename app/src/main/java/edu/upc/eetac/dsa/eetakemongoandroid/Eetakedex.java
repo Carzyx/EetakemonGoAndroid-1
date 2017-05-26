@@ -11,6 +11,8 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.upc.eetac.dsa.eetakemongoandroid.Model.Eetackemon;
+
 public class Eetakedex extends AppCompatActivity {
 List<Eetackemon> eetackemons =new ArrayList<Eetackemon>();
     @Override
