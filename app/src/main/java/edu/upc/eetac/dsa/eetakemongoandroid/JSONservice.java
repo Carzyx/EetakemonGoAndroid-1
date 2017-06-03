@@ -18,7 +18,8 @@ import retrofit2.http.Path;
  */
 
 public interface JSONservice {
-    String URL="http://10.0.2.2:8080/";
+    String URL_Local="http://10.0.2.2:8080/";
+    String URL="http://192.168.1.250:8080/";
 
     @POST("myapp/LogIn")
     Call<User> login(@Body User user);
@@ -30,6 +31,6 @@ public interface JSONservice {
     Call<List<Eetakemon>>getEetakemons(@Path("name")String name);
 
     @POST("myapp/web/markers")
-    Call<List<Markers>>miPos(@Body LatLng latLng);
+    Call<List<Markers>>miPos(@Body Markers markers);
 
 }

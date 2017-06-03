@@ -35,6 +35,7 @@ import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.upc.eetac.dsa.eetakemongoandroid.JSONservice;
@@ -180,21 +181,27 @@ public class Principal extends AppCompatActivity
             lat = location.getLatitude();
             lon = location.getLongitude();
             agregarMarcadores();
-        } else Toast.makeText(this, "No se ha encontrado la ubicacion", Toast.LENGTH_SHORT).show();
+            //agregarMarcador(lat, lon);
+        } else{
+            Toast.makeText(this, "No se ha encontrado la ubicacion", Toast.LENGTH_SHORT).show();
+        }
+
     }
     private void agregarMarcadores(){
         Retrofit retrofit = new Retrofit.Builder().baseUrl(JSONservice.URL).addConverterFactory(GsonConverterFactory.create()).build();
         JSONservice service = retrofit.create(JSONservice.class);
         mMap.clear();
         agregarMarcador(lat, lon);
-        Call<List<Markers>>callMarkers=service.miPos(new LatLng(lat,lon));
+        Markers mar=new Markers();
+        mar.setLat(lat);
+        mar.setLng(lon);
+        Call<List<Markers>>callMarkers=service.miPos(mar);
         callMarkers.enqueue(new Callback<List<Markers>>() {
             @Override
             public void onResponse(Call<List<Markers>> call, Response<List<Markers>> response) {
                 markers=response.body();
                 for(int i=0;i<markers.size();i++){
-
-                    Marker marker1=mMap.addMarker(new MarkerOptions().position(markers.get(i).getLatLng()).title(markers.get(i).getEetakemon().getName()));
+                    Marker marker1=mMap.addMarker(new MarkerOptions().position(new LatLng(markers.get(i).getLat(),markers.get(i).getLng())).title(markers.get(i).getEetakemon().getName()));
                 }
             }
 

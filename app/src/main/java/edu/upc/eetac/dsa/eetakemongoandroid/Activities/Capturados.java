@@ -31,8 +31,6 @@ public class Capturados extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_capturados);
         user=(User)getIntent().getSerializableExtra("User");
-        final Eetakemon eetakemon =new Eetakemon("Charizard",1,10, EetakemonType.FUEGO,"pokemons/charizard.png","El de toda la vida pa que vamos a explicar mas");
-        eetakemons.add(eetakemon);
         Retrofit retrofit = new Retrofit.Builder().baseUrl(JSONservice.URL).addConverterFactory(GsonConverterFactory.create()).build();
         JSONservice service = retrofit.create(JSONservice.class);
         Call<List<Eetakemon>>getEtakemons=service.getEetakemons(user.getName());

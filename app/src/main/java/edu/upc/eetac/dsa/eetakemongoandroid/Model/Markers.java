@@ -7,16 +7,30 @@ import com.google.android.gms.maps.model.LatLng;
  */
 
 public class Markers {
-    LatLng latLng;
-    Eetakemon eetakemon;
+    private double lat;
+    private double lng;
+    private Eetakemon eetakemon;
     public void Markers(){}
 
-    public LatLng getLatLng() {
-        return latLng;
+    public void Markers(double lat,double lng){
+        this.lat=lat;
+        this.lng=lng;
     }
 
-    public void setLatLng(LatLng latLng) {
-        this.latLng = latLng;
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLng() {
+        return lng;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
     }
 
     public Eetakemon getEetakemon() {
