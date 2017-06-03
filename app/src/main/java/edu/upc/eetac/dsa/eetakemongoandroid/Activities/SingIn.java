@@ -1,9 +1,11 @@
-package edu.upc.eetac.dsa.eetakemongoandroid;
+package edu.upc.eetac.dsa.eetakemongoandroid.Activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+
+import edu.upc.eetac.dsa.eetakemongoandroid.R;
 
 public class SingIn extends AppCompatActivity {
 

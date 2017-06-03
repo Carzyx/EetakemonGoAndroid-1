@@ -7,8 +7,8 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="Eetakedex" />
         <item
-            android:id="@+id/pelea"
-            android:title="Pelea" />
+            android:id="@+id/capturados"
+            android:title="Capturados" />
         <item
             android:id="@+id/settings"
             android:icon="@drawable/ic_menu_manage"

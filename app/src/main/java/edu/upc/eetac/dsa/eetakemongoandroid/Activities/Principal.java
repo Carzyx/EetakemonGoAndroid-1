@@ -1,4 +1,4 @@
-package edu.upc.eetac.dsa.eetakemongoandroid;
+package edu.upc.eetac.dsa.eetakemongoandroid.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,19 +35,25 @@ import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
-import edu.upc.eetac.dsa.eetakemongoandroid.Model.Eetackemon;
+import edu.upc.eetac.dsa.eetakemongoandroid.JSONservice;
+import edu.upc.eetac.dsa.eetakemongoandroid.Model.Eetakemon;
+import edu.upc.eetac.dsa.eetakemongoandroid.Model.Markers;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.User;
+import edu.upc.eetac.dsa.eetakemongoandroid.R;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Principal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback,GoogleMap.OnMarkerClickListener {
     private GoogleMap mMap;
     private Marker marker;
-    private List<Marker> markers;
+    private  List<Markers> markers;
     private User user;
-    private List<Eetackemon>eetackemonList=new ArrayList<Eetackemon>();
     double lat = 41.275603;
     double lon = 1.986584;
     @Override
@@ -76,7 +82,6 @@ public class Principal extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //Map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -119,13 +124,15 @@ public class Principal extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-        if (id == R.id.eetakedex) {
-            Intent intent=new Intent(Principal.this,Eetakedex.class);
-            //intent.putExtra("Name and pass",string);
+        if (id == R.id.capturados) {
+            Intent intent=new Intent(Principal.this,Capturados.class);
+            intent.putExtra("User",(Serializable)user);
             startActivity(intent);
-        } else if (id == R.id.pelea) {
-            Toast.makeText(this,"Esta opcion no esta disponible aun",Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.eetakedex) {
+            Intent intent=new Intent(Principal.this,Eetakedex.class);
+            intent.putExtra("User",(Serializable)user);
+            startActivity(intent);
+
         } else if (id == R.id.settings) {
             Toast.makeText(this,"Esta opcion no esta disponible aun",Toast.LENGTH_SHORT).show();
         } else if (id == R.id.exit) {
@@ -142,8 +149,8 @@ public class Principal extends AppCompatActivity
         miUbicacion();
         mMap.setOnMarkerClickListener(this);
     }
-    private void llenar(){
-        user=new User("Nacho","1234");
+    private void datos(){
+        //user=new User("Nacho","1234");
         //View v=View.inflate()
         setContentView(R.layout.nav_header_principal);
         TextView nombre=(TextView)findViewById(R.id.nombre);
@@ -172,27 +179,30 @@ public class Principal extends AppCompatActivity
         if (location != null) {
             lat = location.getLatitude();
             lon = location.getLongitude();
-            agregarMarcador(lat, lon);
-            añadirEetakemon();
+            agregarMarcadores();
         } else Toast.makeText(this, "No se ha encontrado la ubicacion", Toast.LENGTH_SHORT).show();
     }
-    private void añadirEetakemon(){
-        //mMap.clear();
-        List<LatLng>listamarkers=new ArrayList<LatLng>();
-        eetackemonList=new ArrayList<Eetackemon>();
-        markers=new ArrayList<Marker>();
-        Eetackemon eetackemon=new Eetackemon("eetakemon1",2,3,EetakemonType.AIRE,"sda","fghjk");
-        eetackemonList.add(eetackemon);
-        LatLng cordenadas=new LatLng(41.275603,1.986584);
-        listamarkers.add(cordenadas);
-        cordenadas=new LatLng(41.275875,1.986381);
-        eetackemon=new Eetackemon("eetakemon",2,3,EetakemonType.AIRE,"sda","fghjk");
-        eetackemonList.add(eetackemon);
-        listamarkers.add(cordenadas);
-        for(int i=0;i<listamarkers.size();i++){
-            Marker marker1=mMap.addMarker(new MarkerOptions().position(listamarkers.get(i)).title(eetackemonList.get(i).getName()));
-            markers.add(marker1);
-        }
+    private void agregarMarcadores(){
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(JSONservice.URL).addConverterFactory(GsonConverterFactory.create()).build();
+        JSONservice service = retrofit.create(JSONservice.class);
+        mMap.clear();
+        agregarMarcador(lat, lon);
+        Call<List<Markers>>callMarkers=service.miPos(new LatLng(lat,lon));
+        callMarkers.enqueue(new Callback<List<Markers>>() {
+            @Override
+            public void onResponse(Call<List<Markers>> call, Response<List<Markers>> response) {
+                markers=response.body();
+                for(int i=0;i<markers.size();i++){
+
+                    Marker marker1=mMap.addMarker(new MarkerOptions().position(markers.get(i).getLatLng()).title(markers.get(i).getEetakemon().getName()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Markers>> call, Throwable t) {
+
+            }
+        });
     }
     LocationListener locationListener =new LocationListener() {
         @Override
@@ -226,13 +236,13 @@ public class Principal extends AppCompatActivity
         LatLng mi=this.marker.getPosition();
         LatLng click=marker.getPosition();
         if((mi.longitude!=click.longitude)&&(mi.latitude!=click.latitude)){
-            Eetackemon eetackemon=new Eetackemon();
+            Eetakemon eetakemon =new Eetakemon();
             for(int i=0;i<markers.size();i++){
-                if(eetackemonList.get(i).getName().equals(marker.getTitle()))
-                    eetackemon=eetackemonList.get(i);
+                if(markers.get(i).getEetakemon().getName().equals(marker.getTitle()))
+                    eetakemon =markers.get(i).getEetakemon();
             }
         Intent intent=new Intent(getApplicationContext(),Captura.class);
-        intent.putExtra("Eetakemon",(Serializable)eetackemon);
+        intent.putExtra("Eetakemon",(Serializable) eetakemon);
         startActivityForResult(intent,100);
         }
         return false;

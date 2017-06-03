@@ -1,13 +1,13 @@
-package edu.upc.eetac.dsa.eetakemongoandroid;
+package edu.upc.eetac.dsa.eetakemongoandroid.Activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.User;
+import edu.upc.eetac.dsa.eetakemongoandroid.R;
 import retrofit2.Retrofit;
 
 public class LogIn extends AppCompatActivity {

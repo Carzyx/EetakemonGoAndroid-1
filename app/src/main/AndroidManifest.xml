@@ -3,6 +3,7 @@
     package="edu.upc.eetac.dsa.eetakemongoandroid">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
@@ -13,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".LogIn"
+            android:name=".Activities.LogIn"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,10 +23,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SingIn"
+            android:name=".Activities.SingIn"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
-            android:name=".Principal"
+            android:name=".Activities.Principal"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -40,12 +41,13 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".Eetakedex"
+            android:name=".Activities.Capturados"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".VerEetakemon"
+            android:name=".Activities.VerEetakemon"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Captura"></activity>
+        <activity android:name=".Activities.Captura" />
+        <activity android:name=".Activities.Eetakedex"></activity>
     </application>
 
 </manifest>
