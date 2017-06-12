@@ -26,6 +26,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Eetakedex extends AppCompatActivity {
     User user;
+    String token;
     ProgressBar progressBar;
     List<Eetakemon> eetakemons =new ArrayList<Eetakemon>();
     @Override
@@ -33,13 +34,14 @@ public class Eetakedex extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_eetakedex);
         user=(User)getIntent().getSerializableExtra("User");
+        token=getIntent().getStringExtra("Token");
         progressBar=(ProgressBar)findViewById(R.id.progressBar2);
         progressBar.setVisibility(View.VISIBLE);
         final Eetakemon eetakemon =new Eetakemon("Charizard",1,10, EetakemonType.FUEGO,"pokemons/charizard.png","El de toda la vida pa que vamos a explicar mas");
         eetakemons.add(eetakemon);
         Retrofit retrofit = new Retrofit.Builder().baseUrl(JSONservice.URL).addConverterFactory(GsonConverterFactory.create()).build();
         JSONservice service = retrofit.create(JSONservice.class);
-        Call<List<Eetakemon>> getAllEtakemons=service.getAllEetakemons();
+        Call<List<Eetakemon>> getAllEtakemons=service.getAllEetakemons(token);
         getAllEtakemons.enqueue(new Callback<List<Eetakemon>>() {
             @Override
             public void onResponse(Call<List<Eetakemon>> call, Response<List<Eetakemon>> response) {

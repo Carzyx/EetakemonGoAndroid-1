@@ -7,6 +7,10 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="Eetakedex" />
         <item
+            android:id="@+id/pelea"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Pelea" />
+        <item
             android:id="@+id/capturados"
             android:title="Capturados" />
         <item

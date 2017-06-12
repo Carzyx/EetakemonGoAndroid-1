@@ -27,6 +27,7 @@ Retrofit retrofit;
 
         Intent intent=new Intent(LogIn.this,SingIn.class);
         intent.putExtra("Name and pass",string);
+        intent.putExtra("Token",string);
         startActivityForResult(intent,100);
     }
     public void onActivityResult(int requestCode,int resultCode,Intent intent){

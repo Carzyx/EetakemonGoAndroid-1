@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.squareup.picasso.Picasso;
 //
 import android.Manifest;
 import android.content.Context;
@@ -53,6 +54,7 @@ public class Principal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback,GoogleMap.OnMarkerClickListener {
     private GoogleMap mMap;
     private Marker marker;
+    private String token;
     private  List<Markers> markers;
     private User user;
     double lat = 41.275603;
@@ -61,6 +63,8 @@ public class Principal extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
+        user=(User)getIntent().getSerializableExtra("User");
+        token=getIntent().getStringExtra("Token");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -132,8 +136,13 @@ public class Principal extends AppCompatActivity
         } else if (id == R.id.eetakedex) {
             Intent intent=new Intent(Principal.this,Eetakedex.class);
             intent.putExtra("User",(Serializable)user);
+            intent.putExtra("Token",token);
             startActivity(intent);
-
+        } else if (id == R.id.pelea) {
+            Intent intent=new Intent(Principal.this,Pelea.class);
+            intent.putExtra("User",(Serializable)user);
+            intent.putExtra("Token",token);
+            startActivity(intent);
         } else if (id == R.id.settings) {
             Toast.makeText(this,"Esta opcion no esta disponible aun",Toast.LENGTH_SHORT).show();
         } else if (id == R.id.exit) {
@@ -195,7 +204,8 @@ public class Principal extends AppCompatActivity
         Markers mar=new Markers();
         mar.setLat(lat);
         mar.setLng(lon);
-        Call<List<Markers>>callMarkers=service.miPos(mar);
+        Call<List<Markers>>callMarkers=service.miPos(mar,token);
+        //Call<List<Markers>>callMarkers=service.allPos(mar,token);
         callMarkers.enqueue(new Callback<List<Markers>>() {
             @Override
             public void onResponse(Call<List<Markers>> call, Response<List<Markers>> response) {

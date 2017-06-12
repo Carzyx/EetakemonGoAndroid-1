@@ -47,7 +47,8 @@
             android:name=".Activities.VerEetakemon"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activities.Captura" />
-        <activity android:name=".Activities.Eetakedex"></activity>
+        <activity android:name=".Activities.Eetakedex" />
+        <activity android:name=".Activities.Pelea"></activity>
     </application>
 
 </manifest>

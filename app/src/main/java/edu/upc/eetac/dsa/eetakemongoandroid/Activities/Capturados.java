@@ -25,15 +25,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Capturados extends AppCompatActivity {
     User user;
+    String token;
     List<Eetakemon> eetakemons =new ArrayList<Eetakemon>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_capturados);
         user=(User)getIntent().getSerializableExtra("User");
+        token=getIntent().getStringExtra("Token");
         Retrofit retrofit = new Retrofit.Builder().baseUrl(JSONservice.URL).addConverterFactory(GsonConverterFactory.create()).build();
         JSONservice service = retrofit.create(JSONservice.class);
-        Call<List<Eetakemon>>getEtakemons=service.getEetakemons(user.getName());
+        Call<List<Eetakemon>>getEtakemons=service.getEetakemons(user.getName(),token);
         getEtakemons.enqueue(new Callback<List<Eetakemon>>() {
             @Override
             public void onResponse(Call<List<Eetakemon>> call, Response<List<Eetakemon>> response) {
