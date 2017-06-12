@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 //
@@ -160,8 +161,10 @@ public class Principal extends AppCompatActivity
         mMap.setOnMarkerClickListener(this);
     }
     private void datos(){
-        //user=new User("Nacho","1234");
+
         //View v=View.inflate()
+        ImageView mifoto=(ImageView) findViewById(R.id.mifoto);
+        Picasso.with(this).load(JSONservice.URL+user.getImage()).into(mifoto);
         setContentView(R.layout.nav_header_principal);
         TextView nombre=(TextView)findViewById(R.id.nombre);
         nombre.setText(user.getName());
@@ -190,7 +193,6 @@ public class Principal extends AppCompatActivity
             lat = location.getLatitude();
             lon = location.getLongitude();
             agregarMarcadores();
-            //agregarMarcador(lat, lon);
         } else{
             Toast.makeText(this, "No se ha encontrado la ubicacion", Toast.LENGTH_SHORT).show();
         }

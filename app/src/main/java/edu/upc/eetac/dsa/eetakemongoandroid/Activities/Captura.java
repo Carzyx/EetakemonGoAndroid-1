@@ -22,9 +22,10 @@ public class Captura extends AppCompatActivity {
         setContentView(R.layout.activity_captura);
         Eetakemon rival =(Eetakemon)getIntent().getSerializableExtra("Eetakemon");
         ImageView suFoto=(ImageView)findViewById(R.id.suFoto);
-        Picasso.with(this).load(JSONservice.URL+rival.getImage()).into(suFoto);
         ProgressBar suVida=(ProgressBar)findViewById(R.id.suVida);
         suVida.setProgress(100);
+        Picasso.with(this).load(JSONservice.URL+rival.getImage()).into(suFoto);
+
 
         //ImageView miFoto=(ImageView)findViewById(R.id.miFoto);
     }
