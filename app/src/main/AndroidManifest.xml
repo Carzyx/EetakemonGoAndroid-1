@@ -48,7 +48,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activities.Captura" />
         <activity android:name=".Activities.Eetakedex" />
-        <activity android:name=".Activities.Pelea"></activity>
+        <activity android:name=".Activities.Pelea" />
+        <activity android:name=".Activities.PreCombate"></activity>
     </application>
 
 </manifest>

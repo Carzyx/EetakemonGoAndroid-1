@@ -22,6 +22,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -164,7 +165,7 @@ public class Principal extends AppCompatActivity
 
         //View v=View.inflate()
         ImageView mifoto=(ImageView) findViewById(R.id.mifoto);
-        Picasso.with(this).load(JSONservice.URL+user.getImage()).into(mifoto);
+        //Picasso.with(this).load(JSONservice.URL+user.getImage()).into(mifoto);
         setContentView(R.layout.nav_header_principal);
         TextView nombre=(TextView)findViewById(R.id.nombre);
         nombre.setText(user.getName());
@@ -194,7 +195,7 @@ public class Principal extends AppCompatActivity
             lon = location.getLongitude();
             agregarMarcadores();
         } else{
-            Toast.makeText(this, "No se ha encontrado la ubicacion", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No se ha encontrado la ubicación", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -207,13 +208,12 @@ public class Principal extends AppCompatActivity
         mar.setLat(lat);
         mar.setLng(lon);
         Call<List<Markers>>callMarkers=service.miPos(mar,token);
-        //Call<List<Markers>>callMarkers=service.allPos(mar,token);
         callMarkers.enqueue(new Callback<List<Markers>>() {
             @Override
             public void onResponse(Call<List<Markers>> call, Response<List<Markers>> response) {
                 markers=response.body();
                 for(int i=0;i<markers.size();i++){
-                    Marker marker1=mMap.addMarker(new MarkerOptions().position(new LatLng(markers.get(i).getLat(),markers.get(i).getLng())).title(markers.get(i).getEetakemon().getName()));
+                    Marker marker1=mMap.addMarker(new MarkerOptions().position(new LatLng(markers.get(i).getLat(),markers.get(i).getLng())).title(markers.get(i).getEetakemon().getName()).icon(BitmapDescriptorFactory.fromPath(JSONservice.URL+markers.get(i).getEetakemon().getImage())));
                 }
             }
 

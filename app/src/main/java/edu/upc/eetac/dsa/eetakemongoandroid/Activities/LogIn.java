@@ -47,12 +47,12 @@ Retrofit retrofit;
         singIn.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                progressBar.setVisibility(View.INVISIBLE);
                 if(response.code()==200){
                 user=response.body();
                 Intent intent=new Intent(LogIn.this,Principal.class);
                 intent.putExtra("User",user);
                 intent.putExtra("Token",token);
+                progressBar.setVisibility(View.INVISIBLE);
                 startActivityForResult(intent,100);}
                 else
                     Toast.makeText(LogIn.this,"Error en la petición",Toast.LENGTH_SHORT).show();

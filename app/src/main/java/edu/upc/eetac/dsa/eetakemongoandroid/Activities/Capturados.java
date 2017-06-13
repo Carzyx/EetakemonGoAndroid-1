@@ -33,30 +33,15 @@ public class Capturados extends AppCompatActivity {
         setContentView(R.layout.activity_capturados);
         user=(User)getIntent().getSerializableExtra("User");
         token=getIntent().getStringExtra("Token");
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(JSONservice.URL).addConverterFactory(GsonConverterFactory.create()).build();
-        JSONservice service = retrofit.create(JSONservice.class);
-        Call<List<Eetakemon>>getEtakemons=service.getEetakemons(user.getName(),token);
-        getEtakemons.enqueue(new Callback<List<Eetakemon>>() {
+        Adapter adapter=new Adapter(Capturados.this, user.getEetakemons());
+        ListView listView=(ListView)findViewById(R.id.list);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onResponse(Call<List<Eetakemon>> call, Response<List<Eetakemon>> response) {
-                eetakemons =response.body();
-                Adapter adapter=new Adapter(Capturados.this, eetakemons);
-                ListView listView=(ListView)findViewById(R.id.list);
-                listView.setAdapter(adapter);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent intent=new Intent(Capturados.this,VerEetakemon.class);
-                        intent.putExtra("Eetakemon",(Eetakemon) eetakemons.get(position));
-                        startActivity(intent);
-                    }
-                });
-            }
-
-            @Override
-            public void onFailure(Call<List<Eetakemon>> call, Throwable t) {
-                Toast.makeText(Capturados.this,"No se pudo conectar",Toast.LENGTH_SHORT).show();
-                finish();
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent=new Intent(Capturados.this,VerEetakemon.class);
+                intent.putExtra("Eetakemon",(Eetakemon) user.getEetakemons().get(position));
+                startActivity(intent);
             }
         });
     }
