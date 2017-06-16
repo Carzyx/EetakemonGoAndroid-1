@@ -174,6 +174,9 @@ public class Principal extends AppCompatActivity
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             Toast.makeText(this,"No tienes permisos para ubicarte",Toast.LENGTH_SHORT).show();
+            /*ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_LOCATION);*/
             return;
         }
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -181,6 +184,8 @@ public class Principal extends AppCompatActivity
         actualizarUbicacion(location);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,10000,0,locationListener);
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {};
     private void agregarMarcador(double lat, double lon) {
         LatLng coordenadas = new LatLng(lat, lon);
         CameraUpdate miUbicacion = CameraUpdateFactory.newLatLngZoom(coordenadas,18);
@@ -213,7 +218,7 @@ public class Principal extends AppCompatActivity
             public void onResponse(Call<List<Markers>> call, Response<List<Markers>> response) {
                 markers=response.body();
                 for(int i=0;i<markers.size();i++){
-                    Marker marker1=mMap.addMarker(new MarkerOptions().position(new LatLng(markers.get(i).getLat(),markers.get(i).getLng())).title(markers.get(i).getEetakemon().getName()).icon(BitmapDescriptorFactory.fromPath(JSONservice.URL+markers.get(i).getEetakemon().getImage())));
+                    Marker marker1=mMap.addMarker(new MarkerOptions().position(new LatLng(markers.get(i).getLat(),markers.get(i).getLng())).title(markers.get(i).getEetakemon().getName()));
                 }
             }
 
@@ -263,6 +268,7 @@ public class Principal extends AppCompatActivity
         Intent intent=new Intent(getApplicationContext(),Captura.class);
         intent.putExtra("Eetakemon",(Serializable) eetakemon);
         startActivityForResult(intent,100);
+        marker.remove();
         }
         return false;
     }
