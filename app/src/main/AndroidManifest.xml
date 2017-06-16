@@ -46,10 +46,18 @@
         <activity
             android:name=".Activities.VerEetakemon"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activities.Captura" />
-        <activity android:name=".Activities.Eetakedex" />
-        <activity android:name=".Activities.Pelea" />
-        <activity android:name=".Activities.PreCombate"></activity>
+
+        <activity android:name=".Activities.EleccionPelea" />
+
+        <activity android:name=".Activities.Captura"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".Activities.Eetakedex"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".Activities.Pelea"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".Activities.PreCombate"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

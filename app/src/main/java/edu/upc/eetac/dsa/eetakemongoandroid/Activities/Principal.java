@@ -164,9 +164,9 @@ public class Principal extends AppCompatActivity
     private void datos(){
 
         //View v=View.inflate()
-        ImageView mifoto=(ImageView) findViewById(R.id.mifoto);
         //Picasso.with(this).load(JSONservice.URL+user.getImage()).into(mifoto);
         setContentView(R.layout.nav_header_principal);
+        ImageView mifoto=(ImageView) findViewById(R.id.mifoto);
         TextView nombre=(TextView)findViewById(R.id.nombre);
         nombre.setText(user.getName());
     }
@@ -251,6 +251,20 @@ public class Principal extends AppCompatActivity
     };
     protected void onActivityResult(int requestCode,int resultCode,Intent intent){
         super.onActivityResult(requestCode,resultCode,intent);
+        if(requestCode==50){
+            Intent intent1=new Intent(getApplicationContext(),Captura.class);
+            Eetakemon suEetakemon=(Eetakemon) intent.getSerializableExtra("Eetakemon");
+            Eetakemon miEetakemon=(Eetakemon) intent.getSerializableExtra("miEetakemon");
+            intent1.putExtra("Eetakemon",(Serializable) suEetakemon);
+            intent1.putExtra("miEetakemon",(Serializable) miEetakemon);
+            intent1.putExtra("User",(Serializable)user);
+            startActivityForResult(intent1,51);
+
+        }
+        else if(requestCode==51)
+        {
+            Toast.makeText(this,"Lo has capturado",Toast.LENGTH_SHORT).show();
+        }
         if(requestCode==RESULT_OK)
             Toast.makeText(this,"Capturado",Toast.LENGTH_SHORT);
     }
@@ -265,9 +279,10 @@ public class Principal extends AppCompatActivity
                 if(markers.get(i).getEetakemon().getName().equals(marker.getTitle()))
                     eetakemon =markers.get(i).getEetakemon();
             }
-        Intent intent=new Intent(getApplicationContext(),Captura.class);
+        Intent intent=new Intent(getApplicationContext(),EleccionPelea.class);
         intent.putExtra("Eetakemon",(Serializable) eetakemon);
-        startActivityForResult(intent,100);
+        intent.putExtra("User",(Serializable)user);
+        startActivityForResult(intent,50);
         marker.remove();
         }
         return false;

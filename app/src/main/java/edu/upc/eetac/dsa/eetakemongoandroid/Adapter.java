@@ -37,8 +37,14 @@ public class Adapter extends ArrayAdapter<Eetakemon> {
 
         txtTitle.setText(eetakemons.get(position).getName());
         Picasso.with(getContext()).load(JSONservice.URL+ eetakemons.get(position).getImage()).into(imageView);
+        if(eetakemons.get(position).getLevel()!=0){
+            TextView ps = (TextView) rowView.findViewById(R.id.listps);
+            TextView level = (TextView) rowView.findViewById(R.id.listlevel);
+
+            ps.setText("PS: "+String.valueOf(eetakemons.get(position).getPs()));
+            level.setText("Level: "+String.valueOf(eetakemons.get(position).getLevel()));
+        }
         return rowView;
 
-    };
-
+    }
 }
