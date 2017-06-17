@@ -4,13 +4,11 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.List;
-
 import edu.upc.eetac.dsa.eetakemongoandroid.JSONservice;
-import edu.upc.eetac.dsa.eetakemongoandroid.Model.Eetakemon;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.User;
 import edu.upc.eetac.dsa.eetakemongoandroid.R;
 import retrofit2.Call;
@@ -21,48 +19,57 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SingIn extends AppCompatActivity {
 User user;
-    @Override
+String token;
+ProgressBar progressBar;
+Retrofit retrofit;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        user=new User();
         setContentView(R.layout.activity_sing_in);
-        //NAME,SURNAME;USERNAME;PASS;EMAIL
+        progressBar=(ProgressBar)findViewById(R.id.progressBar3);
+        progressBar.setVisibility(View.INVISIBLE);
+
     }
-    public void singin(View view){
+    public void singIn(View view){
+        Intent intent=new Intent(SingIn.this,LogIn.class);
+        startActivityForResult(intent,100);
+    }
+    public void login(View view){
         Retrofit retrofit = new Retrofit.Builder().baseUrl(JSONservice.URL).addConverterFactory(GsonConverterFactory.create()).build();
         JSONservice service = retrofit.create(JSONservice.class);
-        user=new User();
-        EditText name=(EditText)findViewById(R.id.name);
-        user.setName(name.getText().toString());
-        EditText pasword=(EditText)findViewById(R.id.pasword);
-        user.setPassword(pasword.getText().toString());
-        EditText username=(EditText)findViewById(R.id.username);
-        user.setUsername(username.getText().toString());
-        EditText surname=(EditText)findViewById(R.id.surname);
-        user.setSurname(surname.getText().toString());
-        EditText mail=(EditText)findViewById(R.id.mail);
-        user.setEmail(mail.getText().toString());
-        Call<String> singIn=service.singIn(user);
-        singIn.enqueue(new Callback<String>() {
+        TextView name =(TextView) findViewById(R.id.user);
+        TextView pass =(TextView) findViewById(R.id.pasword);
+        user.setUsername(name.getText().toString());
+        user.setPassword(pass.getText().toString());
+        Call<User> singIn=service.SingIn(user);
+        progressBar.setVisibility(View.VISIBLE);
+        singIn.enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if(response.body()=="User created OK"){
+            public void onResponse(Call<User> call, Response<User> response) {
+                if(response.code()==200){
+                user=response.body();
                 Intent intent=new Intent(SingIn.this,Principal.class);
-                intent.putExtra("User",(User) user);
-                startActivity(intent);
-                }
+                intent.putExtra("User",user);
+                intent.putExtra("Token",token);
+                progressBar.setVisibility(View.INVISIBLE);
+                startActivityForResult(intent,100);}
                 else
-                    Toast.makeText(SingIn.this,response.body(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SingIn.this,"Error en la petición",Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
+                progressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(SingIn.this,"No se ha podido acceder al servidor",Toast.LENGTH_SHORT).show();
             }
         });
     }
-    @Override
-    public void onBackPressed() {
-        setResult(RESULT_OK);
-        finish();
+    public void onActivityResult(int requestCode,int resultCode,Intent intent){
+        super.onActivityResult(requestCode,resultCode,intent);
+        if(requestCode==RESULT_OK)
+            finish();
     }
+
 }
