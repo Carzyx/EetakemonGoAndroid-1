@@ -42,7 +42,7 @@ public class Eetakemon implements Serializable {
     }
 
     public int getPs() {
-       return ps;
+        return ps;
     }
 
     public List<Atack> getEetakemonAtack() {

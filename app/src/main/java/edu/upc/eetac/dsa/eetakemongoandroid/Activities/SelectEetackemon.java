@@ -19,25 +19,26 @@ import edu.upc.eetac.dsa.eetakemongoandroid.R;
  */
 
 public class SelectEetackemon extends AppCompatActivity {
-    User user;
-    String token;
-    Eetakemon eetakemon =new Eetakemon();
+    private User user;
+    private String token;
+    private Eetakemon eetakemon = new Eetakemon();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_capturados);
-        user=(User)getIntent().getSerializableExtra("User");
-        eetakemon=(Eetakemon) getIntent().getSerializableExtra("Eetakemon");
-        Adapter adapter=new Adapter(SelectEetackemon.this, user.getEetakemons());
-        ListView listView=(ListView)findViewById(R.id.list);
+        user = (User) getIntent().getSerializableExtra("User");
+        eetakemon = (Eetakemon) getIntent().getSerializableExtra("Eetakemon");
+        Adapter adapter = new Adapter(SelectEetackemon.this, user.getEetakemons());
+        ListView listView = (ListView) findViewById(R.id.list);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent=getIntent();
-                intent.putExtra("Eetakemon",(Serializable)eetakemon);
-                intent.putExtra("miEetakemon",(Serializable)user.getEetakemons().get(position));
-                setResult(50,intent);
+                Intent intent = getIntent();
+                intent.putExtra("Eetakemon", (Serializable) eetakemon);
+                intent.putExtra("miEetakemon", (Serializable) user.getEetakemons().get(position));
+                setResult(50, intent);
                 finish();
             }
         });

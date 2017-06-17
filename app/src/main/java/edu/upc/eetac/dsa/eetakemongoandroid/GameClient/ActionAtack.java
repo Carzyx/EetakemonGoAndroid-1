@@ -8,7 +8,7 @@ public class ActionAtack {
     private String atackName;
     private int damageBase;
 
-    public ActionAtack(String atackName, int damageBase){
+    public ActionAtack(String atackName, int damageBase) {
         this.atackName = atackName;
         this.damageBase = damageBase;
     }

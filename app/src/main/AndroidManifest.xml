@@ -41,14 +41,14 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".Activities.Capturados"
+            android:name=".Activities.EetakemonsCatched"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activities.VerEetakemon"
+            android:name=".Activities.ViewEetakemon"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activities.SelectEetackemon" />
         <activity
-            android:name=".Activities.Captura"
+            android:name=".Activities.CatchEetakemon"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.Eetakedex"
@@ -57,7 +57,7 @@
             android:name=".GameClient.ClientRequest"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activities.Pelea"
+            android:name=".Activities.Fight"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.SelecUser"

@@ -6,8 +6,7 @@ package edu.upc.eetac.dsa.eetakemongoandroid.GameClient;
 
 public class GameProvider extends Thread {
 
-    public void run()
-    {
+    public void run() {
 
     }
 

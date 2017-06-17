@@ -1,7 +1,5 @@
 package edu.upc.eetac.dsa.eetakemongoandroid.Model;
 
-import com.google.android.gms.maps.model.LatLng;
-
 /**
  * Created by Ignacio on 03/06/2017.
  */
@@ -10,11 +8,10 @@ public class Markers {
     private double lat;
     private double lng;
     private Eetakemon eetakemon;
-    public void Markers(){}
 
-    public void Markers(double lat,double lng){
-        this.lat=lat;
-        this.lng=lng;
+    public void setMarkers(double lat, double lng) {
+        this.lat = lat;
+        this.lng = lng;
     }
 
     public double getLat() {

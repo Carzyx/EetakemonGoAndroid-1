@@ -1,8 +1,6 @@
 package edu.upc.eetac.dsa.eetakemongoandroid.Model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 
 /**

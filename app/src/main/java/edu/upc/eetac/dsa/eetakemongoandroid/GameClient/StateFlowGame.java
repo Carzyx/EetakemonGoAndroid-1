@@ -12,7 +12,7 @@ public enum StateFlowGame {
 
 
     private StateFlowGame(int value) {
-        this.value=value;
+        this.value = value;
     }
 
     public int getValue() {

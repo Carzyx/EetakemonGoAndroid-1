@@ -9,8 +9,7 @@ public class Message {
     private String userHome;
     private String userGuest;
 
-    public Message(String action, String usernameHome, String usernameGuest)
-    {
+    public Message(String action, String usernameHome, String usernameGuest) {
         this.action = action;
         this.userHome = usernameHome;
         this.userGuest = usernameGuest;

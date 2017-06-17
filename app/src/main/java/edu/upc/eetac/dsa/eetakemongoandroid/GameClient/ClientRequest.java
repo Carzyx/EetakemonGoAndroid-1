@@ -30,7 +30,7 @@ import edu.upc.eetac.dsa.eetakemongoandroid.R;
 /**
  * Created by Miguel Angel on 13/06/2017.
  */
-public class ClientRequest extends AppCompatActivity implements IClientRequest  {
+public class ClientRequest extends AppCompatActivity implements IClientRequest {
 
     //Start Layout
     private ProgressBar suProgresVida;
@@ -50,7 +50,7 @@ public class ClientRequest extends AppCompatActivity implements IClientRequest  
     //End Layot
     String username;
 
-    Eetakemon eetakemon =new Eetakemon();
+    Eetakemon eetakemon = new Eetakemon();
     String rival;
     Map<String, Eetakemon> eetakemons;
     boolean isGameRunning = true;
@@ -65,20 +65,20 @@ public class ClientRequest extends AppCompatActivity implements IClientRequest  
     ObjectInputStream in;
 
     String message;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_captura);
 
-        int result = getIntent().getIntExtra("Value",0);
+        int result = getIntent().getIntExtra("Value", 0);
         message = getIntent().getStringExtra("Message");
-        if(result == StateFlowGame.SelectUser.getValue()){
-            Intent intent=new Intent(ClientRequest.this, SelecUser.class);
-            startActivityForResult(intent,StateFlowGame.SelectUser.getValue());
-        }
-        else if(result == StateFlowGame.AcceptInvitation.getValue()){
+        if (result == StateFlowGame.SelectUser.getValue()) {
+            Intent intent = new Intent(ClientRequest.this, SelecUser.class);
+            startActivityForResult(intent, StateFlowGame.SelectUser.getValue());
+        } else if (result == StateFlowGame.AcceptInvitation.getValue()) {
             AlertInvitation(message);
-            if(isRequestAccepted) {
+            if (isRequestAccepted) {
                 isGuestUser = true;
                 isHomeUser = false;
                 try {
@@ -91,53 +91,46 @@ public class ClientRequest extends AppCompatActivity implements IClientRequest  
             }
         }
     }
-    public void onActivityResult(int requestCode,int resultCode,Intent intent){
-        super.onActivityResult(requestCode,resultCode,intent);
-        if(requestCode == StateFlowGame.SelectUser.getValue()){
 
-        }
-        else if(requestCode==StateFlowGame.SelectEetackemon.getValue()){
-            eetakemon=(Eetakemon)intent.getSerializableExtra("Eetakemon");
-        }
-        else if(requestCode==StateFlowGame.AcceptInvitation.getValue()){
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (requestCode == StateFlowGame.SelectUser.getValue()) {
+
+        } else if (requestCode == StateFlowGame.SelectEetackemon.getValue()) {
+            eetakemon = (Eetakemon) intent.getSerializableExtra("Eetakemon");
+        } else if (requestCode == StateFlowGame.AcceptInvitation.getValue()) {
 
         }
     }
-    public ClientRequest(String username)
-    {
+
+    public ClientRequest(String username) {
         this.username = username;
     }
 
     public void startGame() throws IOException, ClassNotFoundException {
 
         boolean isRequestSuccesful = false;
-        if(isHomeUser)
-        {
+        if (isHomeUser) {
             createConnection();
             boolean registrationSucces = sendRequestRegistation(username);
             isRequestSuccesful = sendRequestGame(username, rival);
         }
 
-        if(isGuestUser)
-        {
+        if (isGuestUser) {
             responseInvitation();
         }
 
-        if(isRequestSuccesful || isRequestAccepted)
-        {
+        if (isRequestSuccesful || isRequestAccepted) {
             sendEetakemon();
             reciveEetakemons();
 
 
             boolean myTurn = true;
-            while(isGameRunning)
-            {
-                if(myTurn)
-                {
+            while (isGameRunning) {
+                if (myTurn) {
                     doTurn();
                 }
-                if(!myTurn)
-                {
+                if (!myTurn) {
                     reciveEetakemons();
                 }
 
@@ -165,6 +158,7 @@ public class ClientRequest extends AppCompatActivity implements IClientRequest  
         return message;
 
     }
+
     public String createConnectionRequest() throws IOException, ClassNotFoundException {
         createConnection();
         sendRequestRegistation(username);
@@ -220,17 +214,17 @@ public class ClientRequest extends AppCompatActivity implements IClientRequest  
         System.out.println("Eetakemon sended");
     }
 
-    private void eetakemonSelectedByUser()
-    {
-        Intent intent=new Intent(ClientRequest.this, SelectEetackemon.class);
-        startActivityForResult(intent,StateFlowGame.SelectEetackemon.getValue());
+    private void eetakemonSelectedByUser() {
+        Intent intent = new Intent(ClientRequest.this, SelectEetackemon.class);
+        startActivityForResult(intent, StateFlowGame.SelectEetackemon.getValue());
     }
 
     private void reciveEetakemons() throws IOException, ClassNotFoundException {
 
         System.out.println("Reciving eetakemons...");
 
-        Type type = new TypeToken<Map<String, Eetakemon>>(){}.getType();
+        Type type = new TypeToken<Map<String, Eetakemon>>() {
+        }.getType();
 
         eetakemons = jsonSerializer.fromJson((String) in.readObject(), type);
 
@@ -239,43 +233,40 @@ public class ClientRequest extends AppCompatActivity implements IClientRequest  
         updateLayoutByEetakemon();
     }
 
-    private void updateLayoutByEetakemon()
-    {
-        if(isGuestUser)
-        {
+    private void updateLayoutByEetakemon() {
+        if (isGuestUser) {
             miEetakemon = eetakemons.get("userGuest");
             suEetakemon = eetakemons.get("userHome");
         }
-        if(isHomeUser)
-        {
+        if (isHomeUser) {
             miEetakemon = eetakemons.get("userHome");
             suEetakemon = eetakemons.get("userGuest");
         }
 
-        ImageView suFoto=(ImageView)findViewById(R.id.suFoto);
-        ImageView miFoto=(ImageView)findViewById(R.id.miFoto);
-        suProgresVida=(ProgressBar)findViewById(R.id.suProgresVida);
-        miProgresVida=(ProgressBar)findViewById(R.id.miProgresVida);
-        mylive=miEetakemon.getPs();
-        herlive=suEetakemon.getPs();
+        ImageView suFoto = (ImageView) findViewById(R.id.suFoto);
+        ImageView miFoto = (ImageView) findViewById(R.id.miFoto);
+        suProgresVida = (ProgressBar) findViewById(R.id.suProgresVida);
+        miProgresVida = (ProgressBar) findViewById(R.id.miProgresVida);
+        mylive = miEetakemon.getPs();
+        herlive = suEetakemon.getPs();
         suProgresVida.setProgress(100);
         miProgresVida.setProgress(100);
-        Picasso.with(this).load(JSONservice.URL+suEetakemon.getImage()).into(suFoto);
-        Picasso.with(this).load(JSONservice.URL+miEetakemon.getImage()).into(miFoto);
-        suPs=(TextView)findViewById(R.id.suPs);
-        suPs.setText(String.valueOf(suEetakemon.getPs()+"/"+suEetakemon.getPs()));
-        miPs=(TextView)findViewById(R.id.miPs);
-        miPs.setText(String.valueOf(miEetakemon.getPs()+"/"+miEetakemon.getPs()));
-        atak1=(TextView)findViewById(R.id.atack1);
+        Picasso.with(this).load(JSONservice.URL + suEetakemon.getImage()).into(suFoto);
+        Picasso.with(this).load(JSONservice.URL + miEetakemon.getImage()).into(miFoto);
+        suPs = (TextView) findViewById(R.id.suPs);
+        suPs.setText(String.valueOf(suEetakemon.getPs() + "/" + suEetakemon.getPs()));
+        miPs = (TextView) findViewById(R.id.miPs);
+        miPs.setText(String.valueOf(miEetakemon.getPs() + "/" + miEetakemon.getPs()));
+        atak1 = (TextView) findViewById(R.id.atack1);
         atak1.setText(miEetakemon.getEetakemonAtack().get(0).getName());
-        atak2=(TextView)findViewById(R.id.atack2);
+        atak2 = (TextView) findViewById(R.id.atack2);
         atak2.setText(miEetakemon.getEetakemonAtack().get(1).getName());
-        atak3=(TextView)findViewById(R.id.atack3);
+        atak3 = (TextView) findViewById(R.id.atack3);
         atak3.setText(miEetakemon.getEetakemonAtack().get(2).getName());
-        atak4=(TextView)findViewById(R.id.atack4);
+        atak4 = (TextView) findViewById(R.id.atack4);
         atak4.setText(miEetakemon.getEetakemonAtack().get(3).getName());
-        atacar=(TextView)findViewById(R.id.Atacar);
-        salir=(TextView)findViewById(R.id.Salir);
+        atacar = (TextView) findViewById(R.id.Atacar);
+        salir = (TextView) findViewById(R.id.Salir);
         atak1.setVisibility(View.INVISIBLE);
         atak2.setVisibility(View.INVISIBLE);
         atak3.setVisibility(View.INVISIBLE);
@@ -303,7 +294,8 @@ public class ClientRequest extends AppCompatActivity implements IClientRequest  
     private boolean reciveGameResult() throws IOException, ClassNotFoundException {
         return jsonSerializer.fromJson((String) in.readObject(), boolean.class);
     }
-    private void AlertInvitation(String message){
+
+    private void AlertInvitation(String message) {
         AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
         builder1.setMessage(message);
         builder1.setCancelable(true);
@@ -311,7 +303,7 @@ public class ClientRequest extends AppCompatActivity implements IClientRequest  
                 "Yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        isRequestAccepted=true;
+                        isRequestAccepted = true;
                         dialog.cancel();
                     }
                 });
@@ -320,7 +312,7 @@ public class ClientRequest extends AppCompatActivity implements IClientRequest  
                 "No",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        isRequestAccepted=false;
+                        isRequestAccepted = false;
                         dialog.cancel();
                     }
                 });

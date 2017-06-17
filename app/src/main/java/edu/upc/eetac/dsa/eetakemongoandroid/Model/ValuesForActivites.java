@@ -9,8 +9,9 @@ public enum ValuesForActivites {
     Capture_KO(-1);
 
     private final int value;
+
     private ValuesForActivites(int value) {
-        this.value=value;
+        this.value = value;
     }
 
     public int getValue() {
