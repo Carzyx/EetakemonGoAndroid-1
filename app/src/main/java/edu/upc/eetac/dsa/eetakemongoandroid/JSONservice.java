@@ -17,8 +17,8 @@ import retrofit2.http.Path;
  */
 
 public interface JSONservice {
-    String URL_Local = "http://10.0.2.2:8080/";
-    String URL = "http://192.168.1.120:8080/";
+    String URL="http://10.0.2.2:8080/";
+    String URL_Local="http://192.168.1.47:8080/";
 
     @POST("myapp/web/SingIn")
     Call<User> SingIn(@Body User user);

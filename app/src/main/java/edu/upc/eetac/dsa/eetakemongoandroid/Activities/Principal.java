@@ -33,6 +33,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -97,6 +98,7 @@ public class Principal extends AppCompatActivity
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        datos();
         createConnectionRequest();
 
     }
@@ -164,12 +166,13 @@ public class Principal extends AppCompatActivity
 
     private void datos() {
 
-        //View v=View.inflate()
-        //Picasso.with(this).load(JSONservice.URL+user.getImage()).into(mifoto);
-        setContentView(R.layout.nav_header_principal);
-        ImageView mifoto = (ImageView) findViewById(R.id.mifoto);
-        TextView nombre = (TextView) findViewById(R.id.nombre);
-        nombre.setText(user.getName());
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        View header=navigationView.getHeaderView(0);
+        TextView name = (TextView)header.findViewById(R.id.nombre);
+        ImageView mifoto=(ImageView)header.findViewById(R.id.mifoto);
+        Picasso.with(this).load(JSONservice.URL+user.getImage()).into(mifoto);
+        name.setText(user.getName());
     }
 
     private void miUbicacion() {
