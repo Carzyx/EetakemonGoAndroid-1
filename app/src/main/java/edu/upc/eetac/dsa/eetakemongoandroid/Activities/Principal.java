@@ -147,10 +147,9 @@ public class Principal extends AppCompatActivity
             intent.putExtra("Token",token);
             startActivity(intent);
         } else if (id == R.id.pelea) {
-            Intent intent=new Intent(Principal.this,Pelea.class);
-            intent.putExtra("User",(Serializable)user);
-            intent.putExtra("Token",token);
-            startActivity(intent);
+            Intent intent = new Intent(Principal.this,ClientRequest.class);
+            intent.putExtra("Value", StateFlowGame.SelectUser.getValue());
+            startActivityForResult(intent,StateFlowGame.SelectUser.getValue());
         } else if (id == R.id.settings) {
             Toast.makeText(this,"Esta opcion no esta disponible aun",Toast.LENGTH_SHORT).show();
         } else if (id == R.id.exit) {
@@ -302,27 +301,22 @@ public class Principal extends AppCompatActivity
     private void createConnectionRequest(){
         client = client == null ? new ClientRequest(user.getUsername()) : client;
         threadListenigGame = new Thread(new Runnable() {
-            public void run()
-            {
+            public void run() {
                 try {
-                    client.createConnectionRequest();
-
+                    String message = client.createConnectionRequest();
+                    Intent startGame = new Intent(Principal.this, ClientRequest.class);
+                    startGame.putExtra("Value", StateFlowGame.AcceptInvitation.getValue());
+                    startActivityForResult(startGame, StateFlowGame.AcceptInvitation.getValue());
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-            }});
-        threadListenigGame.start();
-
-        try {
-            client.createConnectionRequest();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+                threadListenigGame.start();
+            }
+        });
     }
+
     private void startGame(){
         client = client == null ? new ClientRequest(user.getUsername()) : client;
         try {
