@@ -23,19 +23,23 @@ import retrofit2.http.Path;
 
 public interface JSONservice {
     String URL_Local="http://10.0.2.2:8080/";
-    String URL="http://192.168.1.55:8080/";
+    String URL="http://192.168.1.47:8080/";
 
-    @POST("myapp/web/LogIn")
-    Call<User> login(@Body User user);
+    @POST("myapp/web/SingIn")
+    Call<User> SingIn(@Body User user);
 
-    @POST("myapp/SingIn")
-    Call<String> singIn(@Body User user);
+    @POST("myapp/web/createUser")
+    Call<String> logIn(@Body User user);
+
+    @POST("myapp/web/addAEetakemonsToUser")
+    Call<List<Eetakemon>> addAEetakemonsToUser(@Body User user);
 
     @GET("myapp/web/getAllEetakemons")
     Call<List<Eetakemon>>getAllEetakemons(@Header("Autorization")String Autorization);
 
     @GET("myapp/{name}/getEetakemons")
     Call<List<Eetakemon>>getEetakemons(@Path("name")String name,@Header("Autorization")String Autorization);
+
 
     @POST("myapp/web/markers")
     Call<List<Markers>>miPos(@Body Markers markers,@Header("Autorization")String Autorization);

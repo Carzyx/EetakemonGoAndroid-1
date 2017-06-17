@@ -40,6 +40,7 @@ import android.support.v4.app.ActivityCompat;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.upc.eetac.dsa.eetakemongoandroid.JSONservice;
@@ -48,6 +49,7 @@ import edu.upc.eetac.dsa.eetakemongoandroid.Model.Markers;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.User;
 import edu.upc.eetac.dsa.eetakemongoandroid.GameClient.*;
 import edu.upc.eetac.dsa.eetakemongoandroid.R;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -257,7 +259,7 @@ public class Principal extends AppCompatActivity
         }
     };
     @Override
-    protected void onActivityResult(int requestCode,int resultCode,Intent intent){
+    protected void onActivityResult(int requestCode, final int resultCode, Intent intent){
         super.onActivityResult(requestCode,resultCode,intent);
         if(requestCode==50){
             Intent intent1=new Intent(getApplicationContext(),Captura.class);
@@ -271,11 +273,28 @@ public class Principal extends AppCompatActivity
         }
         else if(requestCode==51)
         {
-            if(resultCode!=RESULT_CANCELED)
-            Toast.makeText(this,"Lo has capturado",Toast.LENGTH_SHORT).show();
+            if(resultCode==RESULT_OK) {
+                Retrofit retrofit = new Retrofit.Builder().baseUrl(JSONservice.URL).addConverterFactory(GsonConverterFactory.create()).build();
+                JSONservice service = retrofit.create(JSONservice.class);
+                Eetakemon eetakemon=(Eetakemon)intent.getSerializableExtra("Eetakemon");
+                List<Eetakemon>list=new ArrayList<>();
+                list.add(eetakemon);
+                user.setEetakemons(list);
+                Call<List<Eetakemon>> addEetakemon=service.addAEetakemonsToUser(user);
+                addEetakemon.enqueue(new Callback<List<Eetakemon>>() {
+                    @Override
+                    public void onResponse(Call<List<Eetakemon>> call, Response<List<Eetakemon>> response) {
+                        if (resultCode==200)
+                            user.setEetakemons(response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Eetakemon>> call, Throwable t) {
+
+                    }
+                });
+            }
         }
-        if(requestCode==RESULT_OK)
-            Toast.makeText(this,"Capturado",Toast.LENGTH_SHORT);
     }
 
     @Override

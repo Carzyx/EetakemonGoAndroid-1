@@ -1,10 +1,10 @@
-package edu.upc.eetac.dsa.eetakemongoandroid.GameClient;
+package edu.upc.eetac.dsa.eetakemongoandroid.Activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -21,17 +21,15 @@ import java.lang.reflect.Type;
 import java.net.Socket;
 import java.util.Map;
 
-import edu.upc.eetac.dsa.eetakemongoandroid.Activities.SelecUser;
-import edu.upc.eetac.dsa.eetakemongoandroid.Activities.SelectEetackemon;
+import edu.upc.eetac.dsa.eetakemongoandroid.GameClient.ActionAtack;
+import edu.upc.eetac.dsa.eetakemongoandroid.GameClient.ClientRequest;
+import edu.upc.eetac.dsa.eetakemongoandroid.GameClient.Message;
+import edu.upc.eetac.dsa.eetakemongoandroid.GameClient.StateFlowGame;
 import edu.upc.eetac.dsa.eetakemongoandroid.JSONservice;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.Eetakemon;
 import edu.upc.eetac.dsa.eetakemongoandroid.R;
 
-/**
- * Created by Miguel Angel on 13/06/2017.
- */
-public class ClientRequest extends AppCompatActivity implements IClientRequest  {
-
+public class GameClientRequest extends AppCompatActivity {
     //Start Layout
     private ProgressBar suProgresVida;
     private ProgressBar miProgresVida;
@@ -68,12 +66,11 @@ public class ClientRequest extends AppCompatActivity implements IClientRequest  
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_captura);
-
+        setContentView(R.layout.activity_game_client_request);
         int result = getIntent().getIntExtra("Value",0);
         message = getIntent().getStringExtra("Message");
         if(result == StateFlowGame.SelectUser.getValue()){
-            Intent intent=new Intent(ClientRequest.this, SelecUser.class);
+            Intent intent=new Intent(GameClientRequest.this, SelecUser.class);
             startActivityForResult(intent,StateFlowGame.SelectUser.getValue());
         }
         else if(result == StateFlowGame.AcceptInvitation.getValue()){
@@ -103,7 +100,7 @@ public class ClientRequest extends AppCompatActivity implements IClientRequest  
 
         }
     }
-    public ClientRequest(String username)
+    public GameClientRequest(String username)
     {
         this.username = username;
     }
@@ -222,7 +219,7 @@ public class ClientRequest extends AppCompatActivity implements IClientRequest  
 
     private void eetakemonSelectedByUser()
     {
-        Intent intent=new Intent(ClientRequest.this, SelectEetackemon.class);
+        Intent intent=new Intent(GameClientRequest.this, SelectEetackemon.class);
         startActivityForResult(intent,StateFlowGame.SelectEetackemon.getValue());
     }
 

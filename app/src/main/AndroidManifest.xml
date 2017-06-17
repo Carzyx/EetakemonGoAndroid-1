@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Activities.LogIn"
+            android:name=".Activities.SingIn"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.SingIn"
+            android:name=".Activities.Login"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".Activities.Principal"
@@ -46,18 +46,23 @@
         <activity
             android:name=".Activities.VerEetakemon"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity android:name=".Activities.SelectEetackemon" />
-
-        <activity android:name=".Activities.Captura"
-            android:theme="@style/AppTheme.NoActionBar"/>
-
-        <activity android:name=".Activities.Eetakedex"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".Activities.Pelea"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".Activities.SelecUser"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".Activities.Captura"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.Eetakedex"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".GameClient.ClientRequest"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.Pelea"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.SelecUser"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activities.GameClientRequest"></activity>
     </application>
 
 </manifest>
