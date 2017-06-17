@@ -52,9 +52,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-//
-//
-
 public class Principal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
     private GoogleMap mMap;
@@ -70,7 +67,9 @@ public class Principal extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_principal);
+
         user = (User) getIntent().getSerializableExtra("User");
         token = getIntent().getStringExtra("Token");
 
@@ -107,8 +106,6 @@ public class Principal extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-
         }
     }
 
@@ -144,12 +141,9 @@ public class Principal extends AppCompatActivity
             intent.putExtra("User", (Serializable) user);
             startActivity(intent);
         } else if (id == R.id.eetakedex) {
-            Intent intent = new Intent(Principal.this, Eetakedex.class);
-            intent.putExtra("User", (Serializable) user);
-            intent.putExtra("Token", token);
-            startActivity(intent);
+            goToEetakedex();
         } else if (id == R.id.pelea) {
-            startGame();
+            startGameTest();
         } else if (id == R.id.settings) {
             Toast.makeText(this, "Esta opcion no esta disponible aun", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.exit) {
@@ -192,12 +186,6 @@ public class Principal extends AppCompatActivity
         actualizarUbicacion(location);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 0, locationListener);
     }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-    }
-
-    ;
 
     private void agregarMarcador(double lat, double lon) {
         LatLng coordenadas = new LatLng(lat, lon);
@@ -349,9 +337,38 @@ public class Principal extends AppCompatActivity
     }
 
     private void startGame() {
-        threadListenigGame.interrupt();
-        Intent intent = new Intent(Principal.this, ClientRequest.class);
-        intent.putExtra("Value", StateFlowGame.SelectUser.getValue());
-        startActivityForResult(intent, StateFlowGame.SelectUser.getValue());
+        try{
+            threadListenigGame.interrupt();
+            Intent intent = new Intent(Principal.this, ClientRequest.class);
+            intent.putExtra("Value", StateFlowGame.SelectUser.getValue());
+            startActivityForResult(intent, StateFlowGame.SelectUser.getValue());
+        }
+        catch (Exception ex)
+        {
+            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG);
+        }
+
+    }
+
+    private void goToEetakedex()
+    {
+        Intent intent = new Intent(Principal.this, Eetakedex.class);
+        intent.putExtra("User", (Serializable) user);
+        intent.putExtra("Token", token);
+        startActivity(intent);
+    }
+
+    private void startGameTest() {
+        try{
+            threadListenigGame.interrupt();
+            Intent intent = new Intent(Principal.this, TestClient.class);
+            intent.putExtra("Value", StateFlowGame.SelectUser.getValue());
+            startActivityForResult(intent, StateFlowGame.SelectUser.getValue());
+        }
+        catch (Exception ex)
+        {
+            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG);
+        }
+
     }
 }
