@@ -224,7 +224,7 @@ public class Principal extends AppCompatActivity
                     Picasso.with(Principal.this).load(JSONservice.URL+markers.get(i).getEetakemon().getImage()).into(imageview);
                     BitmapDrawable drawable = (BitmapDrawable) imageview.getDrawable();
                     Bitmap bitmap = drawable.getBitmap();
-                    Marker marker1=mMap.addMarker(new MarkerOptions().position(new LatLng(markers.get(i).getLat(),markers.get(i).getLng())).title(markers.get(i).getEetakemon().getName()).icon(BitmapDescriptorFactory.fromBitmap(bitmap)));
+                    Marker marker1=mMap.addMarker(new MarkerOptions().position(new LatLng(markers.get(i).getLat(),markers.get(i).getLng())).title(markers.get(i).getEetakemon().getName()));
                 }
             }
 
