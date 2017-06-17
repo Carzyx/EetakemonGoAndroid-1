@@ -7,6 +7,6 @@ import java.io.IOException;
  */
 
 public interface IClientRequest {
-    void StartGame() throws IOException, ClassNotFoundException;
+    void startGame() throws IOException, ClassNotFoundException;
     void createConnectionRequest() throws IOException, ClassNotFoundException;
 }

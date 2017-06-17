@@ -8,11 +8,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import edu.upc.eetac.dsa.eetakemongoandroid.Adapter;
-import edu.upc.eetac.dsa.eetakemongoandroid.Model.Atack;import edu.upc.eetac.dsa.eetakemongoandroid.Model.Eetakemon;
+import edu.upc.eetac.dsa.eetakemongoandroid.Model.Eetakemon;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.User;
 import edu.upc.eetac.dsa.eetakemongoandroid.R;
 
@@ -20,7 +18,7 @@ import edu.upc.eetac.dsa.eetakemongoandroid.R;
  * Created by Ignacio on 16/06/2017.
  */
 
-public class EleccionPelea extends AppCompatActivity {
+public class SelectEetackemon extends AppCompatActivity {
     User user;
     String token;
     Eetakemon eetakemon =new Eetakemon();
@@ -30,7 +28,7 @@ public class EleccionPelea extends AppCompatActivity {
         setContentView(R.layout.activity_capturados);
         user=(User)getIntent().getSerializableExtra("User");
         eetakemon=(Eetakemon) getIntent().getSerializableExtra("Eetakemon");
-        Adapter adapter=new Adapter(EleccionPelea.this, user.getEetakemons());
+        Adapter adapter=new Adapter(SelectEetackemon.this, user.getEetakemons());
         ListView listView=(ListView)findViewById(R.id.list);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -1,5 +1,11 @@
 package edu.upc.eetac.dsa.eetakemongoandroid.GameClient;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -10,15 +16,18 @@ import java.lang.reflect.Type;
 import java.net.Socket;
 import java.util.Map;
 
+import edu.upc.eetac.dsa.eetakemongoandroid.Activities.SelecUser;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.Eetakemon;
-import edu.upc.eetac.dsa.eetakemongoandroid.Model.EetakemonType;
+import edu.upc.eetac.dsa.eetakemongoandroid.R;
 
 /**
  * Created by Miguel Angel on 13/06/2017.
  */
-public class ClientRequest implements IClientRequest {
+public class ClientRequest extends AppCompatActivity implements IClientRequest  {
 
     String username;
+    final boolean isAcceptet;
+    Eetakemon eetakemon =new Eetakemon();
     String rival;
     Map<String, Eetakemon> eetakemons;
     boolean isGameRunning = true;
@@ -29,13 +38,38 @@ public class ClientRequest implements IClientRequest {
     ObjectInputStream in;
 
     String message;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_captura);
+        int result=getIntent().getIntExtra("Value",0);
+        if(result==StateFlowGame.SelectUser.getValue()){
+        Intent intent=new Intent(ClientRequest.this, SelecUser.class);
+        startActivityForResult(intent,StateFlowGame.SelectUser.getValue());
+        }
+        else if(result==StateFlowGame.AcceptInvitation.getValue()){
+            Intent intent=new Intent(ClientRequest.this, SelecUser.class);
+            startActivityForResult(intent,StateFlowGame.AcceptInvitation.getValue());
+        }
+    }
+    public void onActivityResult(int requestCode,int resultCode,Intent intent){
+        super.onActivityResult(requestCode,resultCode,intent);
+        if(requestCode==StateFlowGame.SelectUser.getValue()){
 
+        }
+        else if(requestCode==StateFlowGame.SelectEetackemon.getValue()){
+
+        }
+        else if(requestCode==StateFlowGame.AcceptInvitation.getValue()){
+
+        }
+    }
     public ClientRequest(String username)
     {
         this.username = username;
     }
 
-    public void StartGame() throws IOException, ClassNotFoundException {
+    public void startGame() throws IOException, ClassNotFoundException {
 
         createConnection();
         boolean registrationSucces = sendRequestRegistation(username);
@@ -75,10 +109,16 @@ public class ClientRequest implements IClientRequest {
         out.close();
         requestSocket.close();
     }
-
+    public void reciveRequestInvitation() throws IOException, ClassNotFoundException {
+        System.out.println("Reciving request invitation game...");
+        String message = (String) in.readObject();
+        System.out.println("Request invitation recived");
+        out.writeObject(jsonSerializer.toJson(true));
+    }
     public void createConnectionRequest() throws IOException, ClassNotFoundException {
         createConnection();
         sendRequestRegistation(username);
+        reciveRequestInvitation();
     }
 
     private void createConnection() throws IOException {
@@ -125,7 +165,6 @@ public class ClientRequest implements IClientRequest {
 
     private void sendEetakemon() throws IOException {
         System.out.println("Sending eetakemon...");
-        Eetakemon eetakemon = new Eetakemon("pickachu", 5, 20, EetakemonType.NEUTRO, "", "");
         out.writeObject(jsonSerializer.toJson(eetakemon));
         System.out.println("Eetakemon sended");
 
@@ -163,4 +202,30 @@ public class ClientRequest implements IClientRequest {
     private boolean reciveGameResult() throws IOException, ClassNotFoundException {
         return jsonSerializer.fromJson((String) in.readObject(), boolean.class);
     }
+    private boolean AlertInvitation(String message){
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setMessage(message);
+        builder1.setCancelable(true);
+        builder1.setPositiveButton(
+                "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        isAcceptet=true;
+                        dialog.cancel();
+                    }
+                });
+
+        builder1.setNegativeButton(
+                "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+
+        return isAcceptet;
+    }
 }
+

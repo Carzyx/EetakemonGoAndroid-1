@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import edu.upc.eetac.dsa.eetakemongoandroid.R;
 
-public class PreCombate extends AppCompatActivity {
+public class SelecUser extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

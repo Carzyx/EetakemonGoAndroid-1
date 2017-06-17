@@ -19,8 +19,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 //
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -40,6 +38,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
@@ -47,6 +46,7 @@ import edu.upc.eetac.dsa.eetakemongoandroid.JSONservice;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.Eetakemon;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.Markers;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.User;
+import edu.upc.eetac.dsa.eetakemongoandroid.GameClient.*;
 import edu.upc.eetac.dsa.eetakemongoandroid.R;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -57,10 +57,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Principal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback,GoogleMap.OnMarkerClickListener {
     private GoogleMap mMap;
+    ClientRequest client;
     private Marker marker;
     private String token;
     private  List<Markers> markers;
     private User user;
+    private Thread threadListenigGame;
     double lat = 41.275603;
     double lon = 1.986584;
     @Override
@@ -94,6 +96,8 @@ public class Principal extends AppCompatActivity
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        createConnectionRequest();
+
     }
 
     @Override
@@ -255,6 +259,7 @@ public class Principal extends AppCompatActivity
 
         }
     };
+    @Override
     protected void onActivityResult(int requestCode,int resultCode,Intent intent){
         super.onActivityResult(requestCode,resultCode,intent);
         if(requestCode==50){
@@ -286,12 +291,47 @@ public class Principal extends AppCompatActivity
                 if(markers.get(i).getEetakemon().getName().equals(marker.getTitle()))
                     eetakemon =markers.get(i).getEetakemon();
             }
-        Intent intent=new Intent(getApplicationContext(),EleccionPelea.class);
+        Intent intent=new Intent(getApplicationContext(),SelectEetackemon.class);
         intent.putExtra("Eetakemon",(Serializable) eetakemon);
         intent.putExtra("User",(Serializable)user);
         startActivityForResult(intent,50);
         marker.remove();
         }
         return false;
+    }
+    private void createConnectionRequest(){
+        client = client == null ? new ClientRequest(user.getUsername()) : client;
+        threadListenigGame = new Thread(new Runnable() {
+            public void run()
+            {
+                try {
+                    client.createConnectionRequest();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }});
+        threadListenigGame.start();
+
+        try {
+            client.createConnectionRequest();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+    private void startGame(){
+        client = client == null ? new ClientRequest(user.getUsername()) : client;
+        try {
+            threadListenigGame.interrupt();
+            client.startGame();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
