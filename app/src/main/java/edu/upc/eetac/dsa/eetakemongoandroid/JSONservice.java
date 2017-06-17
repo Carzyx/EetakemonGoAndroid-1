@@ -29,10 +29,10 @@ public interface JSONservice {
     Call<User> SingIn(@Body User user);
 
     @POST("myapp/web/createUser")
-    Call<String> logIn(@Body User user);
+    Call<User> logIn(@Body User user);
 
     @POST("myapp/web/addAEetakemonsToUser")
-    Call<List<Eetakemon>> addAEetakemonsToUser(@Body User user);
+    Call<User> addAEetakemonsToUser(@Body User user);
 
     @GET("myapp/web/getAllEetakemons")
     Call<List<Eetakemon>>getAllEetakemons(@Header("Autorization")String Autorization);

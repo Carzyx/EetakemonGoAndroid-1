@@ -279,18 +279,22 @@ public class Principal extends AppCompatActivity
                 Eetakemon eetakemon=(Eetakemon)intent.getSerializableExtra("Eetakemon");
                 List<Eetakemon>list=new ArrayList<>();
                 list.add(eetakemon);
-                user.setEetakemons(list);
-                Call<List<Eetakemon>> addEetakemon=service.addAEetakemonsToUser(user);
-                addEetakemon.enqueue(new Callback<List<Eetakemon>>() {
+                User user1=new User();
+                user1.setEetakemons(list);
+                user1.setUsername(user.getUsername());
+                Call<User> addEetakemon=service.addAEetakemonsToUser(user);
+                addEetakemon.enqueue(new Callback<User>() {
                     @Override
-                    public void onResponse(Call<List<Eetakemon>> call, Response<List<Eetakemon>> response) {
-                        if (resultCode==200)
-                            user.setEetakemons(response.body());
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        if (response.code()==200)
+                            user.setEetakemons(response.body().getEetakemons());
+                        else
+                        Toast.makeText(Principal.this,"No se pudo añadir",Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
-                    public void onFailure(Call<List<Eetakemon>> call, Throwable t) {
-
+                    public void onFailure(Call<User> call, Throwable t) {
+                        Toast.makeText(Principal.this,"No conectar al servidor",Toast.LENGTH_SHORT).show();
                     }
                 });
             }

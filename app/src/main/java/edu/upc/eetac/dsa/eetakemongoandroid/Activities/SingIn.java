@@ -55,7 +55,7 @@ Retrofit retrofit;
                 progressBar.setVisibility(View.INVISIBLE);
                 startActivityForResult(intent,100);}
                 else
-                    Toast.makeText(SingIn.this,"Error en la petición",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SingIn.this,"Usuario incorrecto",Toast.LENGTH_SHORT).show();
 
             }
 

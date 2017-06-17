@@ -38,21 +38,18 @@ User user;
         user.setSurname(surname.getText().toString());
         EditText mail=(EditText)findViewById(R.id.mail);
         user.setEmail(mail.getText().toString());
-        Call<String> singIn=service.logIn(user);
-        singIn.enqueue(new Callback<String>() {
+        Call<User> login=service.logIn(user);
+        login.enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if(response.body()=="User created OK"){
-                Intent intent=new Intent(LogIn.this,Principal.class);
-                intent.putExtra("User",(User) user);
-                startActivity(intent);
-                }
+            public void onResponse(Call<User> call, Response<User> response) {
+                if(response.code()==200)
+                    user=response.body();
                 else
-                    Toast.makeText(LogIn.this,response.body(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LogIn.this,"Usuario incorrecto",Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
                 Toast.makeText(LogIn.this,"No se ha podido acceder al servidor",Toast.LENGTH_SHORT).show();
             }
         });
