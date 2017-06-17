@@ -17,6 +17,7 @@ import java.net.Socket;
 import java.util.Map;
 
 import edu.upc.eetac.dsa.eetakemongoandroid.Activities.SelecUser;
+import edu.upc.eetac.dsa.eetakemongoandroid.Activities.SelectEetackemon;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.Eetakemon;
 import edu.upc.eetac.dsa.eetakemongoandroid.R;
 
@@ -26,7 +27,7 @@ import edu.upc.eetac.dsa.eetakemongoandroid.R;
 public class ClientRequest extends AppCompatActivity implements IClientRequest  {
 
     String username;
-    final boolean isAcceptet;
+    private boolean isAcceptet;
     Eetakemon eetakemon =new Eetakemon();
     String rival;
     Map<String, Eetakemon> eetakemons;
@@ -43,13 +44,16 @@ public class ClientRequest extends AppCompatActivity implements IClientRequest  
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_captura);
         int result=getIntent().getIntExtra("Value",0);
+        message=getIntent().getStringExtra("Message");
         if(result==StateFlowGame.SelectUser.getValue()){
-        Intent intent=new Intent(ClientRequest.this, SelecUser.class);
-        startActivityForResult(intent,StateFlowGame.SelectUser.getValue());
+            Intent intent=new Intent(ClientRequest.this, SelecUser.class);
+            startActivityForResult(intent,StateFlowGame.SelectUser.getValue());
         }
         else if(result==StateFlowGame.AcceptInvitation.getValue()){
-            Intent intent=new Intent(ClientRequest.this, SelecUser.class);
-            startActivityForResult(intent,StateFlowGame.AcceptInvitation.getValue());
+            AlertInvitation(message);
+            if(isAcceptet){
+            Intent intent=new Intent(ClientRequest.this, SelectEetackemon.class);
+            startActivityForResult(intent,StateFlowGame.SelectEetackemon.getValue());}
         }
     }
     public void onActivityResult(int requestCode,int resultCode,Intent intent){
@@ -58,7 +62,7 @@ public class ClientRequest extends AppCompatActivity implements IClientRequest  
 
         }
         else if(requestCode==StateFlowGame.SelectEetackemon.getValue()){
-
+            eetakemon=(Eetakemon)intent.getSerializableExtra("Eetakemon");
         }
         else if(requestCode==StateFlowGame.AcceptInvitation.getValue()){
 
@@ -202,7 +206,7 @@ public class ClientRequest extends AppCompatActivity implements IClientRequest  
     private boolean reciveGameResult() throws IOException, ClassNotFoundException {
         return jsonSerializer.fromJson((String) in.readObject(), boolean.class);
     }
-    private boolean AlertInvitation(String message){
+    private void AlertInvitation(String message){
         AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
         builder1.setMessage(message);
         builder1.setCancelable(true);
@@ -219,13 +223,13 @@ public class ClientRequest extends AppCompatActivity implements IClientRequest  
                 "No",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        isAcceptet=false;
                         dialog.cancel();
                     }
                 });
         AlertDialog alert11 = builder1.create();
         alert11.show();
-
-        return isAcceptet;
     }
+
 }
 
