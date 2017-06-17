@@ -39,21 +39,20 @@ public class ClientRequest implements IClientRequest {
 
         createConnection();
         boolean registrationSucces = sendRequestRegistation(username);
-        if(!registrationSucces)
-        {
-            closeConnection();
-        }
 
-        reciveRequestInvitation();
+        closeConnection();
 
-        boolean isRequestSuccesful = true;
+        createConnection();
+
+        boolean isRequestSuccesful = sendRequestGame(username, rival);
+
         if(isRequestSuccesful)
         {
             sendEetakemon();
             reciveEetakemons();
 
 
-            boolean myTurn = false;
+            boolean myTurn = true;
             while(isGameRunning)
             {
                 if(myTurn)
@@ -86,7 +85,7 @@ public class ClientRequest implements IClientRequest {
         //1. creating a socket to connect to the server
         requestSocket = new Socket("0.0.0.0", 2004);
         System.out.println("Creating connection...");
-        System.out.println("Guest connected to localhost in port 2004");
+        System.out.println("Home connected to localhost in port 2004");
         //2. get Input and Output streams
         out = new ObjectOutputStream(requestSocket.getOutputStream());
         out.flush();
@@ -110,28 +109,26 @@ public class ClientRequest implements IClientRequest {
         return succes;
     }
 
-    private void reciveRequestInvitation() throws IOException, ClassNotFoundException {
-
-        System.out.println("Reciving request invitation game...");
-        String message = (String) in.readObject();
-        System.out.println("Request invitation recived");
-        out.writeObject(jsonSerializer.toJson(true));
-    }
-
     private boolean sendRequestGame(String username, String rival) throws IOException, ClassNotFoundException {
+
+        System.out.println("Sending request game...");
         Message message = new Message("Invitation", username, rival);
         out.writeObject(jsonSerializer.toJson(message));
 
-        boolean succes = jsonSerializer.fromJson((String)in.readObject(), boolean.class);
+        System.out.println("Reciving request confirmation...");
+        boolean succes = jsonSerializer.fromJson((String) in.readObject(), boolean.class);
+
+        System.out.println("Request game: " + succes);
+
         return succes;
     }
 
     private void sendEetakemon() throws IOException {
-
         System.out.println("Sending eetakemon...");
-        Eetakemon eetakemon = new Eetakemon("charizar", 5, 100, EetakemonType.NEUTRO, "", "");
+        Eetakemon eetakemon = new Eetakemon("pickachu", 5, 20, EetakemonType.NEUTRO, "", "");
         out.writeObject(jsonSerializer.toJson(eetakemon));
         System.out.println("Eetakemon sended");
+
     }
 
     private void reciveEetakemons() throws IOException, ClassNotFoundException {
@@ -146,7 +143,6 @@ public class ClientRequest implements IClientRequest {
     }
 
     private void doAtack() throws IOException {
-
         System.out.println("Doing Atack...");
         ActionAtack action = new ActionAtack("placaje", 20);
         out.writeObject(jsonSerializer.toJson(action));
