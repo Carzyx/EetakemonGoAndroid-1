@@ -147,9 +147,7 @@ public class Principal extends AppCompatActivity
             intent.putExtra("Token",token);
             startActivity(intent);
         } else if (id == R.id.pelea) {
-            Intent intent = new Intent(Principal.this,ClientRequest.class);
-            intent.putExtra("Value", StateFlowGame.SelectUser.getValue());
-            startActivityForResult(intent,StateFlowGame.SelectUser.getValue());
+            startGame();
         } else if (id == R.id.settings) {
             Toast.makeText(this,"Esta opcion no esta disponible aun",Toast.LENGTH_SHORT).show();
         } else if (id == R.id.exit) {
@@ -223,10 +221,10 @@ public class Principal extends AppCompatActivity
             public void onResponse(Call<List<Markers>> call, Response<List<Markers>> response) {
                 markers=response.body();
                 for(int i=0;i<markers.size();i++){
-                    ImageView imageview=new ImageView(Principal.this);
+                    /*ImageView imageview=new ImageView(Principal.this);
                     Picasso.with(Principal.this).load(JSONservice.URL+markers.get(i).getEetakemon().getImage()).into(imageview);
                     BitmapDrawable drawable = (BitmapDrawable) imageview.getDrawable();
-                    Bitmap bitmap = drawable.getBitmap();
+                    Bitmap bitmap = drawable.getBitmap();*/
                     Marker marker1=mMap.addMarker(new MarkerOptions().position(new LatLng(markers.get(i).getLat(),markers.get(i).getLng())).title(markers.get(i).getEetakemon().getName()));
                 }
             }
@@ -312,20 +310,16 @@ public class Principal extends AppCompatActivity
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-                threadListenigGame.start();
+
             }
         });
+        threadListenigGame.start();
     }
 
     private void startGame(){
-        client = client == null ? new ClientRequest(user.getUsername()) : client;
-        try {
             threadListenigGame.interrupt();
-            client.startGame();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+            Intent intent = new Intent(Principal.this,ClientRequest.class);
+            intent.putExtra("Value",StateFlowGame.SelectUser.getValue());
+            startActivityForResult(intent,StateFlowGame.SelectUser.getValue());
     }
 }

@@ -56,7 +56,7 @@ public class ClientRequest extends AppCompatActivity implements IClientRequest  
     boolean isGameRunning = true;
     private boolean isRequestAccepted = false;
     private boolean isGuestUser = false;
-    private boolean isHomeUser = false;
+    private boolean isHomeUser = true;
 
     private Gson jsonSerializer = new Gson();
 
@@ -173,7 +173,7 @@ public class ClientRequest extends AppCompatActivity implements IClientRequest  
 
     private void createConnection() throws IOException {
         //1. creating a socket to connect to the server
-        requestSocket = new Socket("0.0.0.0", 2004);
+        requestSocket = new Socket("192.168.1.55", 2004);
         System.out.println("Creating connection...");
         System.out.println("Home connected to localhost in port 2004");
         //2. get Input and Output streams
