@@ -21,11 +21,10 @@ public class SingIn extends AppCompatActivity {
     private User user;
     private String token;
     private ProgressBar progressBar;
-    private Retrofit retrofit;
+    private  Retrofit retrofit;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         user = new User();
         setContentView(R.layout.activity_sing_in);
         progressBar = (ProgressBar) findViewById(R.id.progressBar3);
@@ -33,12 +32,12 @@ public class SingIn extends AppCompatActivity {
 
     }
 
-    public void singIn(View view) {
+    public void logIn(View view) {
         Intent intent = new Intent(SingIn.this, LogIn.class);
         startActivityForResult(intent, 100);
     }
 
-    public void login(View view) {
+    public void singIn(View view) {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(JSONservice.URL).addConverterFactory(GsonConverterFactory.create()).build();
         JSONservice service = retrofit.create(JSONservice.class);
         TextView name = (TextView) findViewById(R.id.user);

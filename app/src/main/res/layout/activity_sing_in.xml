@@ -111,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/logIn"
                 android:layout_alignParentEnd="true"
-                android:onClick="login"
+                android:onClick="logIn"
                 android:text="LogIn" />
         </LinearLayout>
 
