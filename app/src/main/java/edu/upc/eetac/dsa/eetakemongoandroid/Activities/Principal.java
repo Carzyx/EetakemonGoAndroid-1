@@ -1,6 +1,8 @@
 package edu.upc.eetac.dsa.eetakemongoandroid.Activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 //
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,6 +30,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.squareup.picasso.Picasso;
 //
 import android.Manifest;
 import android.content.Context;
@@ -215,7 +220,11 @@ public class Principal extends AppCompatActivity
             public void onResponse(Call<List<Markers>> call, Response<List<Markers>> response) {
                 markers=response.body();
                 for(int i=0;i<markers.size();i++){
-                    Marker marker1=mMap.addMarker(new MarkerOptions().position(new LatLng(markers.get(i).getLat(),markers.get(i).getLng())).title(markers.get(i).getEetakemon().getName()));
+                    ImageView imageview=new ImageView(Principal.this);
+                    Picasso.with(Principal.this).load(JSONservice.URL+markers.get(i).getEetakemon().getImage()).into(imageview);
+                    BitmapDrawable drawable = (BitmapDrawable) imageview.getDrawable();
+                    Bitmap bitmap = drawable.getBitmap();
+                    Marker marker1=mMap.addMarker(new MarkerOptions().position(new LatLng(markers.get(i).getLat(),markers.get(i).getLng())).title(markers.get(i).getEetakemon().getName()).icon(BitmapDescriptorFactory.fromBitmap(bitmap)));
                 }
             }
 
@@ -260,6 +269,7 @@ public class Principal extends AppCompatActivity
         }
         else if(requestCode==51)
         {
+            if(resultCode!=RESULT_CANCELED)
             Toast.makeText(this,"Lo has capturado",Toast.LENGTH_SHORT).show();
         }
         if(requestCode==RESULT_OK)

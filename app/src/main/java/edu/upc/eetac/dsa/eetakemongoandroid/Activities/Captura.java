@@ -85,6 +85,7 @@ public class Captura extends AppCompatActivity {
         return 0;
     }
     public void salir(View view){
+        setResult(RESULT_CANCELED,getIntent());
         finish();
     }
     public void onBackPressed(){
