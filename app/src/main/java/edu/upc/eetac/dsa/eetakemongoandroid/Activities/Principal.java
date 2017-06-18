@@ -39,13 +39,12 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import edu.upc.eetac.dsa.eetakemongoandroid.GameClient.ClientRequest;
-import edu.upc.eetac.dsa.eetakemongoandroid.GameClient.StateFlowGame;
 import edu.upc.eetac.dsa.eetakemongoandroid.JSONservice;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.Eetakemon;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.Markers;
+import edu.upc.eetac.dsa.eetakemongoandroid.Model.Party;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.User;
+import edu.upc.eetac.dsa.eetakemongoandroid.Model.ValuesForActivites;
 import edu.upc.eetac.dsa.eetakemongoandroid.R;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -55,8 +54,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Principal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION=0;
     private GoogleMap mMap;
-    ClientRequest client;
     private Marker marker;
     private String token;
     private List<Markers> markers;
@@ -99,8 +98,6 @@ public class Principal extends AppCompatActivity
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         datos();
-        createConnectionRequest();
-
     }
 
     @Override
@@ -145,10 +142,10 @@ public class Principal extends AppCompatActivity
         } else if (id == R.id.eetakedex) {
             goToEetakedex();
         } else if (id == R.id.pelea) {
-            startGameTest();
-        } else if (id == R.id.settings) {
-            Toast.makeText(this, "Esta opcion no esta disponible aun", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.exit) {
+            Intent intent = new Intent(Principal.this, SelectEetackemon.class);
+            intent.putExtra("User", (Serializable) user);
+            startActivityForResult(intent, ValuesForActivites.StartFight.getValue());
+        } else if (id == R.id.exit){
             Toast.makeText(this, "Hasta otra", Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -179,9 +176,9 @@ public class Principal extends AppCompatActivity
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             Toast.makeText(this, "No tienes permisos para ubicarte", Toast.LENGTH_SHORT).show();
-            /*ActivityCompat.requestPermissions(this,
+            ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    MY_PERMISSIONS_REQUEST_LOCATION);*/
+                    MY_PERMISSIONS_REQUEST_LOCATION);
             return;
         }
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -189,7 +186,6 @@ public class Principal extends AppCompatActivity
         actualizarUbicacion(location);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 0, locationListener);
     }
-
     private void agregarMarcador(double lat, double lon) {
         LatLng coordenadas = new LatLng(lat, lon);
         CameraUpdate miUbicacion = CameraUpdateFactory.newLatLngZoom(coordenadas, 18);
@@ -263,41 +259,48 @@ public class Principal extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, final int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        if (requestCode == 50) {
-            Intent intent1 = new Intent(getApplicationContext(), CatchEetakemon.class);
-            Eetakemon suEetakemon = (Eetakemon) intent.getSerializableExtra("Eetakemon");
-            Eetakemon miEetakemon = (Eetakemon) intent.getSerializableExtra("miEetakemon");
-            intent1.putExtra("Eetakemon", (Serializable) suEetakemon);
-            intent1.putExtra("miEetakemon", (Serializable) miEetakemon);
-            intent1.putExtra("User", (Serializable) user);
-            startActivityForResult(intent1, 51);
-
-        } else if (requestCode == 51) {
-            if (resultCode == RESULT_OK) {
+        if (requestCode == ValuesForActivites.StartCapture.getValue()) {
+            if (resultCode==ValuesForActivites.SelectEetackemon.getValue()){
+                Intent intent1 = new Intent(getApplicationContext(), CatchEetakemon.class);
+                Eetakemon suEetakemon = (Eetakemon) intent.getSerializableExtra("Eetakemon");
+                Eetakemon miEetakemon = (Eetakemon) intent.getSerializableExtra("miEetakemon");
+                intent1.putExtra("Eetakemon", (Serializable) suEetakemon);
+                intent1.putExtra("miEetakemon", (Serializable) miEetakemon);
+                intent1.putExtra("User", (Serializable) user);
+                startActivityForResult(intent1, ValuesForActivites.StartCapture.getValue());
+            }
+            else if(resultCode == ValuesForActivites.CaptureOk.getValue()){
                 Retrofit retrofit = new Retrofit.Builder().baseUrl(JSONservice.URL).addConverterFactory(GsonConverterFactory.create()).build();
                 JSONservice service = retrofit.create(JSONservice.class);
-                Eetakemon eetakemon = (Eetakemon) intent.getSerializableExtra("Eetakemon");
-                List<Eetakemon> list = new ArrayList<>();
-                list.add(eetakemon);
-                User user1 = new User();
+                User user1=user;
+                List<Eetakemon>list = new ArrayList<Eetakemon>();
+                Eetakemon suEetakemon = (Eetakemon) intent.getSerializableExtra("Eetakemon");
+                list.add(suEetakemon);
                 user1.setEetakemons(list);
-                user1.setUsername(user.getUsername());
-                Call<User> addEetakemon = service.addAEetakemonsToUser(user);
-                addEetakemon.enqueue(new Callback<User>() {
+                final Call<User> getEetakemons = service.addAEetakemonsToUser(user1);
+                getEetakemons.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
-                        if (response.code() == 200)
-                            user.setEetakemons(response.body().getEetakemons());
-                        else
-                            Toast.makeText(Principal.this, "No se pudo añadir", Toast.LENGTH_SHORT).show();
+                        user=response.body();
                     }
 
                     @Override
                     public void onFailure(Call<User> call, Throwable t) {
-                        Toast.makeText(Principal.this, "No conectar al servidor", Toast.LENGTH_SHORT).show();
+
                     }
                 });
             }
+
+        } else if (requestCode == ValuesForActivites.StartFight.getValue()) {
+                Intent intent1=new Intent(Principal.this,Fight.class);
+                Eetakemon miEetakemon = (Eetakemon) intent.getSerializableExtra("miEetakemon");
+                List<Eetakemon>list=new ArrayList<>();
+                list.add(miEetakemon);
+                User user1=user;
+                user1.setEetakemons(list);
+                intent1.putExtra("Token", token);
+                intent1.putExtra("User", (Serializable) user1);
+                startActivity(intent1);
         }
     }
 
@@ -314,43 +317,10 @@ public class Principal extends AppCompatActivity
             Intent intent = new Intent(getApplicationContext(), SelectEetackemon.class);
             intent.putExtra("Eetakemon", (Serializable) eetakemon);
             intent.putExtra("User", (Serializable) user);
-            startActivityForResult(intent, 50);
+            startActivityForResult(intent, ValuesForActivites.StartCapture.getValue());
             marker.remove();
         }
         return false;
-    }
-
-    private void createConnectionRequest() {
-        client = client == null ? new ClientRequest(user.getUsername()) : client;
-        threadListenigGame = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    String message = client.createConnectionRequest();
-                    Intent startGame = new Intent(Principal.this, ClientRequest.class);
-                    startGame.putExtra("Value", StateFlowGame.AcceptInvitation.getValue());
-                    startActivityForResult(startGame, StateFlowGame.AcceptInvitation.getValue());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        threadListenigGame.start();
-    }
-
-    private void startGame() {
-        try{
-            threadListenigGame.interrupt();
-            Intent intent = new Intent(Principal.this, ClientRequest.class);
-            intent.putExtra("Value", StateFlowGame.SelectUser.getValue());
-            startActivityForResult(intent, StateFlowGame.SelectUser.getValue());
-        }
-        catch (Exception ex)
-        {
-            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG);
-        }
-
     }
 
     private void goToEetakedex()
@@ -361,17 +331,4 @@ public class Principal extends AppCompatActivity
         startActivity(intent);
     }
 
-    private void startGameTest() {
-        try{
-            threadListenigGame.interrupt();
-            Intent intent = new Intent(Principal.this, TestClient.class);
-            intent.putExtra("Value", StateFlowGame.SelectUser.getValue());
-            startActivityForResult(intent, StateFlowGame.SelectUser.getValue());
-        }
-        catch (Exception ex)
-        {
-            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG);
-        }
-
-    }
 }

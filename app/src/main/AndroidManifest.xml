@@ -59,17 +59,10 @@
         <activity
             android:name=".Activities.Fight"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Activities.SelecUser"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activities.GameClientRequest" />
-        <activity android:name=".View.ViewProfile" />
-        <activity android:name=".View.ViewAtack"></activity>
-        <activity android:name=".Activities.GameClientRequest" />
-        <activity
-            android:name=".Activities.TestClient"
-            android:label="@string/title_activity_test_client"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".View.ViewProfile"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".View.ViewAtack"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

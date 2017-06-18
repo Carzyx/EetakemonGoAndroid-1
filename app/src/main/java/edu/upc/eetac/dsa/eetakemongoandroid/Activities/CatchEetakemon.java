@@ -16,6 +16,7 @@ import java.util.Random;
 import edu.upc.eetac.dsa.eetakemongoandroid.JSONservice;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.Atack;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.Eetakemon;
+import edu.upc.eetac.dsa.eetakemongoandroid.Model.ValuesForActivites;
 import edu.upc.eetac.dsa.eetakemongoandroid.R;
 
 public class CatchEetakemon extends AppCompatActivity {
@@ -93,8 +94,8 @@ public class CatchEetakemon extends AppCompatActivity {
         rivalEetakemonHealth = rivalEetakemon.getPs();
         rivalEetakemonHealthProgessBar.setProgress(100);
         myEetakemonHealthProgessBar.setProgress(100);
-        Picasso.with(this).load(JSONservice.URL + rivalEetakemon.getImage()).into(suFoto);
-        Picasso.with(this).load(JSONservice.URL + myEetakemon.getImage()).into(miFoto);
+        Picasso.with(this).load(JSONservice.URL + rivalEetakemon.getImage()).resize(120,120).into(suFoto);
+        Picasso.with(this).load(JSONservice.URL + myEetakemon.getImage()).resize(120,120).into(miFoto);
         rivalPs = (TextView) findViewById(R.id.suPs);
         rivalPs.setText(String.valueOf(rivalEetakemon.getPs() + "/" + rivalEetakemon.getPs()));
         myPs = (TextView) findViewById(R.id.miPs);
@@ -118,7 +119,7 @@ public class CatchEetakemon extends AppCompatActivity {
     private void doAtack(Atack atack) {
         rivalEetakemonHealth = rivalEetakemonHealth - atack.getDamageBase();
         rivalPs.setText(rivalEetakemonHealth + "/" + rivalEetakemon.getPs());
-        rivalEetakemonHealthProgessBar.setProgress(rivalEetakemonHealth * rivalEetakemon.getPs() / 100);
+        rivalEetakemonHealthProgessBar.setProgress(rivalEetakemonHealth *100/ rivalEetakemon.getPs());
         if (rivalEetakemonHealth > 0) {
             Random r = new Random();
             recieveAtack(rivalEetakemon.getEetakemonAtack().get(r.nextInt(3)));
@@ -128,23 +129,35 @@ public class CatchEetakemon extends AppCompatActivity {
     }
 
     private void recieveAtack(Atack atack) {
+        Toast.makeText(CatchEetakemon.this,"El rival ha usado: "+atack.getName(),Toast.LENGTH_LONG).show();
         myEetakemonHealth = myEetakemonHealth - atack.getDamageBase();
         myPs.setText(myEetakemonHealth + "/" + myEetakemon.getPs());
-        myEetakemonHealthProgessBar.setProgress(myEetakemonHealth * myEetakemon.getPs() / 100);
+        myEetakemonHealthProgessBar.setProgress(myEetakemonHealth  * 100/ myEetakemon.getPs());
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         status();
     }
 
     private void status() {
+
         if (rivalEetakemonHealth <= 0) {
             getIntent().putExtra("Eetakemon", (Serializable) rivalEetakemon);
-            Toast.makeText(this, "Los has capturado", Toast.LENGTH_SHORT).show();
-            setResult(RESULT_OK, getIntent());
+            Toast.makeText(this, "Lo has capturado", Toast.LENGTH_SHORT).show();
+            getIntent().putExtra("Eetakemon",(Serializable)rivalEetakemon);
+            setResult(ValuesForActivites.CaptureOk.getValue(), getIntent());
             finish();
         } else if (myEetakemonHealth <= 0) {
             Toast.makeText(this, "Se te ha escapado", Toast.LENGTH_SHORT).show();
-            setResult(RESULT_CANCELED, getIntent());
+            setResult(ValuesForActivites.CaptureKO.getValue(), getIntent());
             finish();
         }
+    }
+    public void exit(View view){
+        setResult(ValuesForActivites.CaptureKO.getValue());
+        finish();
     }
 
 }

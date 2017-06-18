@@ -51,7 +51,7 @@
                     android:hint="Username"
                     android:inputType="text"
                     android:letterSpacing="0.1"
-                    android:text="Ignacio"
+                    android:text="Nacho"
                     android:textColor="#fff"
                     android:textColorHint="#d9e5f3"
                     android:textSize="16dp" />

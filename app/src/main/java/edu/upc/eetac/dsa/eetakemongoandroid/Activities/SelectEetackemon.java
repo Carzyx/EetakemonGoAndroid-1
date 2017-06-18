@@ -12,6 +12,7 @@ import java.io.Serializable;
 import edu.upc.eetac.dsa.eetakemongoandroid.Adapter;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.Eetakemon;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.User;
+import edu.upc.eetac.dsa.eetakemongoandroid.Model.ValuesForActivites;
 import edu.upc.eetac.dsa.eetakemongoandroid.R;
 
 /**
@@ -38,7 +39,7 @@ public class SelectEetackemon extends AppCompatActivity {
                 Intent intent = getIntent();
                 intent.putExtra("Eetakemon", (Serializable) eetakemon);
                 intent.putExtra("miEetakemon", (Serializable) user.getEetakemons().get(position));
-                setResult(50, intent);
+                setResult(ValuesForActivites.SelectEetackemon.getValue(), intent);
                 finish();
             }
         });

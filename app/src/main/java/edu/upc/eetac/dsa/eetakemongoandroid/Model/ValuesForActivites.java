@@ -5,8 +5,11 @@ package edu.upc.eetac.dsa.eetakemongoandroid.Model;
  */
 
 public enum ValuesForActivites {
-    Capture_OK(1),
-    Capture_KO(-1);
+    SelectEetackemon(1),
+    StartCapture(2),
+    CaptureOk(3),
+    CaptureKO(4),
+    StartFight(5);
 
     private final int value;
 
