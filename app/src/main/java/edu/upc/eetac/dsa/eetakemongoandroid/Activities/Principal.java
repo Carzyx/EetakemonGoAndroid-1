@@ -195,9 +195,8 @@ public class Principal extends AppCompatActivity
         if (marker != null) marker.remove();{
             try {
                 URL url = new URL(JSONservice.URL+user.getImage());
-                //Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                //marker = mMap.addMarker(new MarkerOptions().position(coordenadas).title("mi posicion").icon(BitmapDescriptorFactory.fromBitmap(bmp)));
-                marker = mMap.addMarker(new MarkerOptions().position(coordenadas).title("mi posicion"));
+                Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                marker = mMap.addMarker(new MarkerOptions().position(coordenadas).title("mi posicion").icon(BitmapDescriptorFactory.fromBitmap(bmp)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -233,8 +232,9 @@ public class Principal extends AppCompatActivity
                 for (int i = 0; i < markers.size(); i++) {
                     try {
                         URL url = new URL(JSONservice.URL+"pokemons/explorer.png");
-                        Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                        Marker marker1 = mMap.addMarker(new MarkerOptions().position(new LatLng(markers.get(i).getLat(), markers.get(i).getLng())).title(markers.get(i).getEetakemon().getName()).icon(BitmapDescriptorFactory.fromBitmap(bmp)));
+                        //Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                        //Marker marker1 = mMap.addMarker(new MarkerOptions().position(new LatLng(markers.get(i).getLat(), markers.get(i).getLng())).title(markers.get(i).getEetakemon().getName()).icon(BitmapDescriptorFactory.fromBitmap(bmp)));
+                        Marker marker1 = mMap.addMarker(new MarkerOptions().position(new LatLng(markers.get(i).getLat(), markers.get(i).getLng())).title(markers.get(i).getEetakemon().getName()));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
