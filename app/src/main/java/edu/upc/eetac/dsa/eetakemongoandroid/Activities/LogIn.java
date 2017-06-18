@@ -41,6 +41,7 @@ public class LogIn extends AppCompatActivity {
         user.setSurname(surname.getText().toString());
         EditText mail = (EditText) findViewById(R.id.mail);
         user.setEmail(mail.getText().toString());
+        user.setImage("profile/evoluciona.png");
         Call<User> login = service.logIn(user);
         login.enqueue(new Callback<User>() {
             @Override

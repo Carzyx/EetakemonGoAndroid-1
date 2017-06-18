@@ -37,12 +37,12 @@ public class ViewEetakemon extends AppCompatActivity {
         description.setText(eetakemon.getDescription());
         TextView atac1=(TextView)findViewById(R.id.textView13);
         atac1.setText(eetakemon.getAtacks().get(0).getName());
-        TextView atac12=(TextView)findViewById(R.id.textView12);
-        atac1.setText(eetakemon.getAtacks().get(0).getName());
+        TextView atac2=(TextView)findViewById(R.id.textView12);
+        atac2.setText(eetakemon.getAtacks().get(1).getName());
         TextView atac3=(TextView)findViewById(R.id.textView15);
-        atac1.setText(eetakemon.getAtacks().get(0).getName());
+        atac3.setText(eetakemon.getAtacks().get(2).getName());
         TextView atac4=(TextView)findViewById(R.id.textView14);
-        atac1.setText(eetakemon.getAtacks().get(0).getName());
+        atac4.setText(eetakemon.getAtacks().get(3).getName());
     }
 
 }

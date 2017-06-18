@@ -122,7 +122,7 @@ public class Fight extends AppCompatActivity {
         }
         Retrofit retrofit = new Retrofit.Builder().baseUrl(JSONservice.URL).addConverterFactory(GsonConverterFactory.create()).build();
         JSONservice service = retrofit.create(JSONservice.class);
-        Call<Party> getParty = service.getParty(token);
+        Call<Party> getParty = service.getParty(user,token);
         getParty.enqueue(new Callback<Party>() {
             @Override
             public void onResponse(Call<Party> call, Response<Party> response) {
@@ -246,7 +246,7 @@ public class Fight extends AppCompatActivity {
             }
         Retrofit retrofit = new Retrofit.Builder().baseUrl(JSONservice.URL).addConverterFactory(GsonConverterFactory.create()).build();
         JSONservice service = retrofit.create(JSONservice.class);
-        final Call<Party> getParty = service.getParty(token);
+        final Call<Party> getParty = service.getParty(user,token);
         getParty.enqueue(new Callback<Party>() {
             @Override
             public void onResponse(Call<Party> call, Response<Party> response) {

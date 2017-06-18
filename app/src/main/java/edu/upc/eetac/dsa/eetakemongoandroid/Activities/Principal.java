@@ -231,10 +231,10 @@ public class Principal extends AppCompatActivity
                 token=response.headers().get("authoritzation");
                 for (int i = 0; i < markers.size(); i++) {
                     try {
-                        URL url = new URL(JSONservice.URL+"pokemons/explorer.png");
-                        //Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                        //Marker marker1 = mMap.addMarker(new MarkerOptions().position(new LatLng(markers.get(i).getLat(), markers.get(i).getLng())).title(markers.get(i).getEetakemon().getName()).icon(BitmapDescriptorFactory.fromBitmap(bmp)));
-                        Marker marker1 = mMap.addMarker(new MarkerOptions().position(new LatLng(markers.get(i).getLat(), markers.get(i).getLng())).title(markers.get(i).getEetakemon().getName()));
+                        URL url = new URL(JSONservice.URL+"profile/brock.png");
+                        Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                        Marker marker1 = mMap.addMarker(new MarkerOptions().position(new LatLng(markers.get(i).getLat(), markers.get(i).getLng())).title(markers.get(i).getEetakemon().getName()).icon(BitmapDescriptorFactory.fromBitmap(bmp)));
+                        //Marker marker1 = mMap.addMarker(new MarkerOptions().position(new LatLng(markers.get(i).getLat(), markers.get(i).getLng())).title(markers.get(i).getEetakemon().getName()));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
