@@ -14,7 +14,7 @@ public class Eetakemon implements Serializable {
     private EetakemonType type;
     private String image;
     private String description;
-    private List<Atack> eetakemonAtack;
+    private List<Atack> atacks;
 
     public Eetakemon() {
     }
@@ -45,8 +45,8 @@ public class Eetakemon implements Serializable {
         return ps;
     }
 
-    public List<Atack> getEetakemonAtack() {
-        return eetakemonAtack;
+    public List<Atack> getAtacks() {
+        return atacks;
     }
 
     public void setType(EetakemonType type) {
@@ -65,8 +65,8 @@ public class Eetakemon implements Serializable {
         this.ps = ps;
     }
 
-    public void setEetakemonAtack(List<Atack> eetakemonAtack) {
-        this.eetakemonAtack = eetakemonAtack;
+    public void setAtacks(List<Atack> atacks) {
+        this.atacks = atacks;
     }
 
     public String getImage() {
@@ -88,8 +88,8 @@ public class Eetakemon implements Serializable {
         int typeDamage=1;
         AtacksEetakemon eetackemonatack=new AtacksEetakemon();
         for (int i=0;i<4;i++){
-            if(eetakemonAtack[i].getIdatack()==id)
-                eetackemonatack=eetakemonAtack[i];
+            if(atacks[i].getIdatack()==id)
+                eetackemonatack=atacks[i];
         }
         return eetackemonatack.damageBase*typeDamage*level;
     }*/

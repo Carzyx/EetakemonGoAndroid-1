@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -37,6 +39,8 @@ import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import edu.upc.eetac.dsa.eetakemongoandroid.JSONservice;
@@ -46,6 +50,7 @@ import edu.upc.eetac.dsa.eetakemongoandroid.Model.Party;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.User;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.ValuesForActivites;
 import edu.upc.eetac.dsa.eetakemongoandroid.R;
+import edu.upc.eetac.dsa.eetakemongoandroid.View.ViewProfile;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -57,10 +62,10 @@ public class Principal extends AppCompatActivity
     private static final int MY_PERMISSIONS_REQUEST_LOCATION=0;
     private GoogleMap mMap;
     private Marker marker;
+    ImageView mifoto;
     private String token;
     private List<Markers> markers;
     private User user;
-    private Thread threadListenigGame;
     double lat = 41.275603;
     double lon = 1.986584;
 
@@ -80,8 +85,9 @@ public class Principal extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent=new Intent(Principal.this, ViewProfile.class);
+                intent.putExtra("User",(Serializable) user);
+                startActivity(intent);
             }
         });
 
@@ -121,12 +127,6 @@ public class Principal extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -167,9 +167,12 @@ public class Principal extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         View header=navigationView.getHeaderView(0);
         TextView name = (TextView)header.findViewById(R.id.nombre);
-        ImageView mifoto=(ImageView)header.findViewById(R.id.mifoto);
+        mifoto=(ImageView)header.findViewById(R.id.mifoto);
         Picasso.with(this).load(JSONservice.URL+user.getImage()).into(mifoto);
         name.setText(user.getName());
+        FloatingActionButton fab=(FloatingActionButton)findViewById(R.id.fab);
+        Picasso.with(this).load(JSONservice.URL+user.getImage()).into(fab);
+
     }
 
     private void miUbicacion() {
@@ -189,8 +192,16 @@ public class Principal extends AppCompatActivity
     private void agregarMarcador(double lat, double lon) {
         LatLng coordenadas = new LatLng(lat, lon);
         CameraUpdate miUbicacion = CameraUpdateFactory.newLatLngZoom(coordenadas, 18);
-        if (marker != null) marker.remove();
-        marker = mMap.addMarker(new MarkerOptions().position(coordenadas).title("mi posicion").icon(BitmapDescriptorFactory.fromResource(R.drawable.personaje)));
+        if (marker != null) marker.remove();{
+            try {
+                URL url = new URL(JSONservice.URL+user.getImage());
+                //Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                //marker = mMap.addMarker(new MarkerOptions().position(coordenadas).title("mi posicion").icon(BitmapDescriptorFactory.fromBitmap(bmp)));
+                marker = mMap.addMarker(new MarkerOptions().position(coordenadas).title("mi posicion"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         mMap.animateCamera(miUbicacion);
     }
 
@@ -218,12 +229,15 @@ public class Principal extends AppCompatActivity
             @Override
             public void onResponse(Call<List<Markers>> call, Response<List<Markers>> response) {
                 markers = response.body();
+                token=response.headers().get("authoritzation");
                 for (int i = 0; i < markers.size(); i++) {
-                    /*ImageView imageview=new ImageView(Principal.this);
-                    Picasso.with(Principal.this).load(JSONservice.URL+markers.get(i).getEetakemon().getImage()).into(imageview);
-                    BitmapDrawable drawable = (BitmapDrawable) imageview.getDrawable();
-                    Bitmap bitmap = drawable.getBitmap();*/
-                    Marker marker1 = mMap.addMarker(new MarkerOptions().position(new LatLng(markers.get(i).getLat(), markers.get(i).getLng())).title(markers.get(i).getEetakemon().getName()));
+                    try {
+                        URL url = new URL(JSONservice.URL+"pokemons/explorer.png");
+                        Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                        Marker marker1 = mMap.addMarker(new MarkerOptions().position(new LatLng(markers.get(i).getLat(), markers.get(i).getLng())).title(markers.get(i).getEetakemon().getName()).icon(BitmapDescriptorFactory.fromBitmap(bmp)));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
@@ -277,11 +291,12 @@ public class Principal extends AppCompatActivity
                 Eetakemon suEetakemon = (Eetakemon) intent.getSerializableExtra("Eetakemon");
                 list.add(suEetakemon);
                 user1.setEetakemons(list);
-                final Call<User> getEetakemons = service.addAEetakemonsToUser(user1);
+                final Call<User> getEetakemons = service.addAEetakemonsToUser(user1,token);
                 getEetakemons.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
                         user=response.body();
+                        token=response.headers().get("authoritzation");
                     }
 
                     @Override
@@ -292,6 +307,9 @@ public class Principal extends AppCompatActivity
             }
 
         } else if (requestCode == ValuesForActivites.StartFight.getValue()) {
+            if(resultCode==ValuesForActivites.FinishFight.getValue()){
+
+            }else{
                 Intent intent1=new Intent(Principal.this,Fight.class);
                 Eetakemon miEetakemon = (Eetakemon) intent.getSerializableExtra("miEetakemon");
                 List<Eetakemon>list=new ArrayList<>();
@@ -300,7 +318,7 @@ public class Principal extends AppCompatActivity
                 user1.setEetakemons(list);
                 intent1.putExtra("Token", token);
                 intent1.putExtra("User", (Serializable) user1);
-                startActivity(intent1);
+                startActivity(intent1);}
         }
     }
 
@@ -326,7 +344,7 @@ public class Principal extends AppCompatActivity
     private void goToEetakedex()
     {
         Intent intent = new Intent(Principal.this, Eetakedex.class);
-        intent.putExtra("User", (Serializable) user);
+        intent.putExtra("Eetakemons", (Serializable) user);
         intent.putExtra("Token", token);
         startActivity(intent);
     }

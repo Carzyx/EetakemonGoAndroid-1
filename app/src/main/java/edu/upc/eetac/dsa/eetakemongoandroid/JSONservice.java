@@ -21,41 +21,36 @@ import retrofit2.http.Path;
 public interface JSONservice {
     String URL_Local="http://10.0.2.2:8080/";
     String URL="http://192.168.1.47:8080/";
-
-    @POST("myapp/web/SingIn")
+    //User
+    @POST("myapp/UserService/singIn")
     Call<User> SingIn(@Body User user);
 
-    @POST("myapp/web/createUser")
+    @POST("myapp/UserService/createUser")
     Call<User> logIn(@Body User user);
 
-    @POST("myapp/web/addAEetakemonsToUser")
-    Call<User> addAEetakemonsToUser(@Body User user);
+    @GET("myapp/UserService/getCompleteUserByName/{username}")
+    Call<User> getCompletUserByUsername(@Path("username") String username, @Header("Authoritzation") String Autorization);
 
-    @GET("myapp/web/getAllEetakemons")
-    Call<List<Eetakemon>> getAllEetakemons(@Header("Autorization") String Autorization);
+    @POST("myapp/UserService/addAEetakemonsToUser")
+    Call<User> addAEetakemonsToUser(@Body User user,@Header("Authoritzation") String Autorization);
 
-    @GET("myapp/web/getCompleteUserByUsername/{username}")
-    Call<User> getCompletUserByUsername(@Path("username") String username, @Header("Autorization") String Autorization);
+    @GET("myapp/EetakemonService/getAllEetakemons")
+    Call<List<Eetakemon>> getAllEetakemons(@Header("Authoritzation") String Autorization);
 
-    @GET("myapp/{name}/getEetakemons")
-    Call<List<Eetakemon>> getEetakemons(@Path("name") String name, @Header("Autorization") String Autorization);
+    //Markers
+    @POST("myapp/UserService/markers")
+    Call<List<Markers>> miPos(@Body Markers markers, @Header("Authoritzation") String Autorization);
 
+    @POST("myapp/UserService/nearMarkers")
+    Call<List<Markers>> allPos(@Body Markers markers, @Header("Authoritzation") String Autorization);
+    //Party
+    @POST("myapp/GameService/registerCandidate")
+    Call<Party>resgisterCandidate(@Body User user, @Header("Authoritzation") String Autorization);
 
-    @POST("myapp/web/markers")
-    Call<List<Markers>> miPos(@Body Markers markers, @Header("Autorization") String Autorization);
+    @GET("myapp/GameService/getParty")
+    Call<Party>getParty(@Header("Authoritzation") String Autorization);
 
-    @POST("myapp/web/nearMarkers")
-    Call<List<Markers>> allPos(@Body Markers markers, @Header("Autorization") String Autorization);
+    @POST("myapp/GameService/doAtack")
+    Call<Party>doAtack(@Body Atack atack,@Header("Authoritzation") String Autorization);
 
-    @POST("myapp/web/markers")
-    Call<Party>resgisterCandidate(@Body User user, @Header("Autorization") String Autorization);
-
-    @GET("myapp/web/markers")
-    Call<Party>getParty(@Header("Autorization") String Autorization);
-
-    @POST()
-    Call<Party>doAtack(@Body Atack atack,@Header("Autorization") String Autorization);
-
-    @GET()
-    Call<Party>reciveAtack(@Header("Autorization") String Autorization);
 }

@@ -14,6 +14,7 @@ import edu.upc.eetac.dsa.eetakemongoandroid.Adapter;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.Eetakemon;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.User;
 import edu.upc.eetac.dsa.eetakemongoandroid.R;
+import edu.upc.eetac.dsa.eetakemongoandroid.View.ViewEetakemon;
 
 public class EetakemonsCatched extends AppCompatActivity {
     private User user;

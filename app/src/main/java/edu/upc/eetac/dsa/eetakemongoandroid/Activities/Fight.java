@@ -10,13 +10,12 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.Random;
-
 import edu.upc.eetac.dsa.eetakemongoandroid.JSONservice;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.Atack;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.Eetakemon;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.Party;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.User;
+import edu.upc.eetac.dsa.eetakemongoandroid.Model.ValuesForActivites;
 import edu.upc.eetac.dsa.eetakemongoandroid.R;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,14 +48,15 @@ public class Fight extends AppCompatActivity {
         setContentView(R.layout.activity_captura);
         user =(User) getIntent().getSerializableExtra("User");
         token=getIntent().getStringExtra("Token");
-        prepareAcitivty();
+        preActivity();
         Retrofit retrofit = new Retrofit.Builder().baseUrl(JSONservice.URL).addConverterFactory(GsonConverterFactory.create()).build();
         JSONservice service = retrofit.create(JSONservice.class);
         final Call<Party> getParty = service.resgisterCandidate(user,token);
         getParty.enqueue(new Callback<Party>() {
             @Override
             public void onResponse(Call<Party> call, Response<Party> response) {
-                if(response.body()==null){
+                token=response.headers().get("authoritzation");
+                if(response.body()== null){
                     waitVsible();
                     getParty();
                 }
@@ -66,6 +66,8 @@ public class Fight extends AppCompatActivity {
                     prepareAcitivty();
                     if(party.getTurnIndication().get(user.getName())==true)
                         onBackPressed();
+                    else
+                        recieveAtack();
                 }
             }
 
@@ -76,19 +78,19 @@ public class Fight extends AppCompatActivity {
         });
     }
     public void atak1(View view) {
-        doAtack(myEetakemon.getEetakemonAtack().get(0));
+        doAtack(myEetakemon.getAtacks().get(0));
     }
 
     public void atak2(View view) {
-        doAtack(myEetakemon.getEetakemonAtack().get(1));
+        doAtack(myEetakemon.getAtacks().get(1));
     }
 
     public void atak3(View view) {
-        doAtack(myEetakemon.getEetakemonAtack().get(2));
+        doAtack(myEetakemon.getAtacks().get(2));
     }
 
     public void atak4(View view) {
-        doAtack(myEetakemon.getEetakemonAtack().get(3));
+        doAtack(myEetakemon.getAtacks().get(3));
     }
 
     private void doAtack(Atack atack) {
@@ -98,6 +100,7 @@ public class Fight extends AppCompatActivity {
         getParty.enqueue(new Callback<Party>() {
             @Override
             public void onResponse(Call<Party> call, Response<Party> response) {
+                token=response.headers().get("authoritzation");
                 whoIam();
                 waitVsible();
                 Adapt();
@@ -111,6 +114,7 @@ public class Fight extends AppCompatActivity {
 
     }
     private void recieveAtack() {
+        waitVsible();
         try {
             Thread.sleep(1500);
         } catch (InterruptedException e) {
@@ -118,10 +122,11 @@ public class Fight extends AppCompatActivity {
         }
         Retrofit retrofit = new Retrofit.Builder().baseUrl(JSONservice.URL).addConverterFactory(GsonConverterFactory.create()).build();
         JSONservice service = retrofit.create(JSONservice.class);
-        Call<Party> getParty = service.reciveAtack(token);
+        Call<Party> getParty = service.getParty(token);
         getParty.enqueue(new Callback<Party>() {
             @Override
             public void onResponse(Call<Party> call, Response<Party> response) {
+                token=response.headers().get("authoritzation");
                 if(response.body()==null)
                     recieveAtack();
                 whoIam();
@@ -135,30 +140,35 @@ public class Fight extends AppCompatActivity {
             }
         });
     }
-
-    private void prepareAcitivty() {
-        ImageView suFoto = (ImageView) findViewById(R.id.suFoto);
-        ImageView miFoto = (ImageView) findViewById(R.id.miFoto);
+    private void preActivity(){
         rivalEetakemonHealthProgessBar = (ProgressBar) findViewById(R.id.suProgresVida);
+        rivalEetakemonHealthProgessBar.setVisibility(View.INVISIBLE);
         myEetakemonHealthProgessBar = (ProgressBar) findViewById(R.id.miProgresVida);
-        myEetakemonHealth = myEetakemon.getPs();
-        rivalEetakemonHealth = rivalEetakemon.getPs();
-        rivalEetakemonHealthProgessBar.setProgress(100);
-        myEetakemonHealthProgessBar.setProgress(100);
-        Picasso.with(this).load(JSONservice.URL + rivalEetakemon.getImage()).into(suFoto);
-        Picasso.with(this).load(JSONservice.URL + myEetakemon.getImage()).into(miFoto);
+        myEetakemonHealthProgessBar.setVisibility(View.INVISIBLE);
         rivalPs = (TextView) findViewById(R.id.suPs);
         myPs = (TextView) findViewById(R.id.miPs);
         atakText1 = (TextView) findViewById(R.id.atack1);
-        atakText1.setText(myEetakemon.getEetakemonAtack().get(0).getName());
         atakText2 = (TextView) findViewById(R.id.atack2);
-        atakText2.setText(myEetakemon.getEetakemonAtack().get(1).getName());
         atakText3 = (TextView) findViewById(R.id.atack3);
-        atakText3.setText(myEetakemon.getEetakemonAtack().get(2).getName());
         atakText4 = (TextView) findViewById(R.id.atack4);
-        atakText4.setText(myEetakemon.getEetakemonAtack().get(3).getName());
         atackText = (TextView) findViewById(R.id.Atacar);
         exitText = (TextView) findViewById(R.id.Salir);
+    }
+    private void prepareAcitivty() {
+        ImageView suFoto = (ImageView) findViewById(R.id.suFoto);
+        ImageView miFoto = (ImageView) findViewById(R.id.miFoto);
+        myEetakemonHealth = myEetakemon.getPs();
+        rivalEetakemonHealth = rivalEetakemon.getPs();
+        rivalEetakemonHealthProgessBar.setVisibility(View.VISIBLE);
+        rivalEetakemonHealthProgessBar.setProgress(100);
+        myEetakemonHealthProgessBar.setProgress(100);
+        myEetakemonHealthProgessBar.setVisibility(View.VISIBLE);
+        Picasso.with(this).load(JSONservice.URL + rivalEetakemon.getImage()).into(suFoto);
+        Picasso.with(this).load(JSONservice.URL + myEetakemon.getImage()).into(miFoto);
+        atakText1.setText(myEetakemon.getAtacks().get(0).getName());
+        atakText2.setText(myEetakemon.getAtacks().get(1).getName());
+        atakText3.setText(myEetakemon.getAtacks().get(2).getName());
+        atakText4.setText(myEetakemon.getAtacks().get(3).getName());
         atakText1.setVisibility(View.INVISIBLE);
         atakText2.setVisibility(View.INVISIBLE);
         atakText3.setVisibility(View.INVISIBLE);
@@ -215,6 +225,18 @@ public class Fight extends AppCompatActivity {
         myEetakemonHealthProgessBar.setProgress(myEetakemon.getPs()*100/myEetakemonHealth);
         myPs.setText(String.valueOf(myEetakemon.getPs()+ "/" + myEetakemonHealth));
         rivalPs.setText(String.valueOf(rivalEetakemon.getPs()+ "/" +rivalEetakemonHealth));
+        if(myEetakemon.getPs()<=0){
+            Toast.makeText(Fight.this,"Has perdido",Toast.LENGTH_SHORT).show();
+            getIntent().putExtra("Token", token);
+            setResult(ValuesForActivites.StartFight.getValue(),getIntent());
+            finish();
+        }
+        else if(rivalEetakemon.getPs()<=0){
+            Toast.makeText(Fight.this,"Has ganado",Toast.LENGTH_SHORT).show();
+            getIntent().putExtra("Token", token);
+            setResult(ValuesForActivites.FinishFight.getValue(),getIntent());
+            finish();
+        }
     }
     private void getParty() {
             try {
@@ -228,7 +250,8 @@ public class Fight extends AppCompatActivity {
         getParty.enqueue(new Callback<Party>() {
             @Override
             public void onResponse(Call<Party> call, Response<Party> response) {
-                if(response.body()==null){
+                token=response.headers().get("authoritzation");
+                if(response.body() == null){
                     waitVsible();
                     getParty();
                 }
@@ -236,8 +259,10 @@ public class Fight extends AppCompatActivity {
                     waitInvisible();
                     whoIam();
                     prepareAcitivty();
-                    if(party.getTurnIndication().get(user.getName())==true)
+                    if(party.getTurnIndication().get(user.getUsername())== true)
                         onBackPressed();
+                    else
+                        recieveAtack();
                 }
             }
             @Override
@@ -245,6 +270,5 @@ public class Fight extends AppCompatActivity {
                 Toast.makeText(Fight.this, "No se ha podido acceder al servidor", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 }

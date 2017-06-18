@@ -1,4 +1,4 @@
-package edu.upc.eetac.dsa.eetakemongoandroid.Activities;
+package edu.upc.eetac.dsa.eetakemongoandroid.View;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +35,14 @@ public class ViewEetakemon extends AppCompatActivity {
         ps.setText("PS: " + String.valueOf(eetakemon.getPs()));
         tipo.setText("Tipo: " + eetakemon.getType().toString());
         description.setText(eetakemon.getDescription());
+        TextView atac1=(TextView)findViewById(R.id.textView13);
+        atac1.setText(eetakemon.getAtacks().get(0).getName());
+        TextView atac12=(TextView)findViewById(R.id.textView12);
+        atac1.setText(eetakemon.getAtacks().get(0).getName());
+        TextView atac3=(TextView)findViewById(R.id.textView15);
+        atac1.setText(eetakemon.getAtacks().get(0).getName());
+        TextView atac4=(TextView)findViewById(R.id.textView14);
+        atac1.setText(eetakemon.getAtacks().get(0).getName());
     }
 
 }

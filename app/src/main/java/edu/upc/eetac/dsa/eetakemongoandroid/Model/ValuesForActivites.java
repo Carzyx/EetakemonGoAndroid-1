@@ -9,7 +9,8 @@ public enum ValuesForActivites {
     StartCapture(2),
     CaptureOk(3),
     CaptureKO(4),
-    StartFight(5);
+    StartFight(5),
+    FinishFight(6);
 
     private final int value;
 

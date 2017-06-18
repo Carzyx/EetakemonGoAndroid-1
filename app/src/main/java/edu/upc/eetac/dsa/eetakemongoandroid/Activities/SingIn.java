@@ -49,8 +49,9 @@ public class SingIn extends AppCompatActivity {
         singIn.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                if (response.code() == 200) {
+                if (response.code()==200) {
                     user = response.body();
+                    token=response.headers().get("authoritzation");
                     Intent intent = new Intent(SingIn.this, Principal.class);
                     intent.putExtra("User", user);
                     intent.putExtra("Token", token);

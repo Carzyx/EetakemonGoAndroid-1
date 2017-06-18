@@ -15,9 +15,9 @@ import java.util.List;
 import edu.upc.eetac.dsa.eetakemongoandroid.Adapter;
 import edu.upc.eetac.dsa.eetakemongoandroid.JSONservice;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.Eetakemon;
-import edu.upc.eetac.dsa.eetakemongoandroid.Model.EetakemonType;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.User;
 import edu.upc.eetac.dsa.eetakemongoandroid.R;
+import edu.upc.eetac.dsa.eetakemongoandroid.View.ViewEetakemon;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,8 +38,6 @@ public class Eetakedex extends AppCompatActivity {
         token = getIntent().getStringExtra("Token");
         progressBar = (ProgressBar) findViewById(R.id.progressBar2);
         progressBar.setVisibility(View.VISIBLE);
-        final Eetakemon eetakemon = new Eetakemon("Charizard", 1, 10, EetakemonType.FUEGO, "pokemons/charizard.png", "El de toda la vida pa que vamos a explicar mas");
-        eetakemons.add(eetakemon);
         Retrofit retrofit = new Retrofit.Builder().baseUrl(JSONservice.URL).addConverterFactory(GsonConverterFactory.create()).build();
         JSONservice service = retrofit.create(JSONservice.class);
         Call<List<Eetakemon>> getAllEtakemons = service.getAllEetakemons(token);
@@ -47,6 +45,7 @@ public class Eetakedex extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Eetakemon>> call, Response<List<Eetakemon>> response) {
                 progressBar.setVisibility(View.INVISIBLE);
+                token=response.headers().get("authoritzation");
                 eetakemons = response.body();
                 ListView listView = (ListView) findViewById(R.id.list1);
                 Adapter adapter = new Adapter(Eetakedex.this, eetakemons);

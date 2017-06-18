@@ -54,19 +54,19 @@ public class CatchEetakemon extends AppCompatActivity {
     }
 
     public void atak1(View view) {
-        doAtack(myEetakemon.getEetakemonAtack().get(0));
+        doAtack(myEetakemon.getAtacks().get(0));
     }
 
     public void atak2(View view) {
-        doAtack(myEetakemon.getEetakemonAtack().get(1));
+        doAtack(myEetakemon.getAtacks().get(1));
     }
 
     public void atak3(View view) {
-        doAtack(myEetakemon.getEetakemonAtack().get(2));
+        doAtack(myEetakemon.getAtacks().get(2));
     }
 
     public void atak4(View view) {
-        doAtack(myEetakemon.getEetakemonAtack().get(3));
+        doAtack(myEetakemon.getAtacks().get(3));
     }
 
     public void salir(View view) {
@@ -101,13 +101,13 @@ public class CatchEetakemon extends AppCompatActivity {
         myPs = (TextView) findViewById(R.id.miPs);
         myPs.setText(String.valueOf(myEetakemon.getPs() + "/" + myEetakemon.getPs()));
         atakText1 = (TextView) findViewById(R.id.atack1);
-        atakText1.setText(myEetakemon.getEetakemonAtack().get(0).getName());
+        atakText1.setText(myEetakemon.getAtacks().get(0).getName());
         atakText2 = (TextView) findViewById(R.id.atack2);
-        atakText2.setText(myEetakemon.getEetakemonAtack().get(1).getName());
+        atakText2.setText(myEetakemon.getAtacks().get(1).getName());
         atakText3 = (TextView) findViewById(R.id.atack3);
-        atakText3.setText(myEetakemon.getEetakemonAtack().get(2).getName());
+        atakText3.setText(myEetakemon.getAtacks().get(2).getName());
         atakText4 = (TextView) findViewById(R.id.atack4);
-        atakText4.setText(myEetakemon.getEetakemonAtack().get(3).getName());
+        atakText4.setText(myEetakemon.getAtacks().get(3).getName());
         atackText = (TextView) findViewById(R.id.Atacar);
         exitText = (TextView) findViewById(R.id.Salir);
         atakText1.setVisibility(View.INVISIBLE);
@@ -122,7 +122,7 @@ public class CatchEetakemon extends AppCompatActivity {
         rivalEetakemonHealthProgessBar.setProgress(rivalEetakemonHealth *100/ rivalEetakemon.getPs());
         if (rivalEetakemonHealth > 0) {
             Random r = new Random();
-            recieveAtack(rivalEetakemon.getEetakemonAtack().get(r.nextInt(3)));
+            recieveAtack(rivalEetakemon.getAtacks().get(r.nextInt(3)));
         }
         status();
 

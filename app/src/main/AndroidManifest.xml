@@ -44,7 +44,7 @@
             android:name=".Activities.EetakemonsCatched"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activities.ViewEetakemon"
+            android:name=".View.ViewEetakemon"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activities.SelectEetackemon" />
         <activity

@@ -1,5 +1,6 @@
 package edu.upc.eetac.dsa.eetakemongoandroid.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -16,6 +17,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LogIn extends AppCompatActivity {
+    String token;
     User user;
 
     @Override
@@ -43,8 +45,13 @@ public class LogIn extends AppCompatActivity {
         login.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                if (response.code() == 200)
+                if (response.code() == 200){
+                    token=response.headers().get("Authoritzation");
                     user = response.body();
+                    Intent intent = new Intent(LogIn.this, Principal.class);
+                    intent.putExtra("User", user);
+                    intent.putExtra("Token", token);
+                    startActivityForResult(intent, 100);}
                 else
                     Toast.makeText(LogIn.this, "Usuario incorrecto", Toast.LENGTH_SHORT).show();
             }
