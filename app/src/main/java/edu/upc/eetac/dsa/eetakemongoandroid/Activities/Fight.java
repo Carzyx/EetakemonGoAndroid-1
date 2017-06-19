@@ -61,10 +61,11 @@ public class Fight extends AppCompatActivity {
                     getParty();
                 }
                 else {
+                    party = response.body();
                     waitInvisible();
                     whoIam();
                     prepareAcitivty();
-                    if(party.getTurnIndication().get(user.getName())==true)
+                    if(party.getTurnIndication().get(user.getUsername()).equals(true))
                         onBackPressed();
                     else
                         recieveAtack();
@@ -258,6 +259,7 @@ public class Fight extends AppCompatActivity {
                     getParty();
                 }
                 else {
+                    party = response.body();
                     waitInvisible();
                     whoIam();
                     prepareAcitivty();
