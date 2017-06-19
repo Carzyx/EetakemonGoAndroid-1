@@ -61,10 +61,11 @@ public class Fight extends AppCompatActivity {
                     getParty();
                 }
                 else {
+                    party = response.body();
                     waitInvisible();
                     whoIam();
                     prepareAcitivty();
-                    if(party.getTurnIndication().get(user.getName())==true)
+                    if(party.getTurnIndication().get(user.getUsername()).equals(true))
                         onBackPressed();
                     else
                         recieveAtack();
@@ -177,12 +178,14 @@ public class Fight extends AppCompatActivity {
     private void whoIam(){
         if(party.getCandidate1().getName()==user.getName()) {
             myEetakemon=party.getCandidate1().getEetakemons().get(0);
+            rivalEetakemon = party.getCandidate2().getEetakemons().get(0);
             iAmCandidate1=true;
 
         }
         else
         {
             myEetakemon=party.getCandidate2().getEetakemons().get(0);
+            rivalEetakemon = party.getCandidate1().getEetakemons().get(0);
             iAmCandidate1=true;
         }
     }
@@ -256,6 +259,7 @@ public class Fight extends AppCompatActivity {
                     getParty();
                 }
                 else {
+                    party = response.body();
                     waitInvisible();
                     whoIam();
                     prepareAcitivty();
