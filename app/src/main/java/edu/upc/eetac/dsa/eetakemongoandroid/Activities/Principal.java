@@ -26,6 +26,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -230,20 +232,27 @@ public class Principal extends AppCompatActivity
                 markers = response.body();
                 token=response.headers().get("authoritzation");
                 for (int i = 0; i < markers.size(); i++) {
-                    try {
-                        URL url = new URL(JSONservice.URL+"profile/brock.png");
-                        Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                        Marker marker1 = mMap.addMarker(new MarkerOptions().position(new LatLng(markers.get(i).getLat(), markers.get(i).getLng())).title(markers.get(i).getEetakemon().getName()).icon(BitmapDescriptorFactory.fromBitmap(bmp)));
+                        //URL url = new URL(JSONservice.URL+"profile/brock.png");
+                        //Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                        putIcon(markers.get(i));
                         //Marker marker1 = mMap.addMarker(new MarkerOptions().position(new LatLng(markers.get(i).getLat(), markers.get(i).getLng())).title(markers.get(i).getEetakemon().getName()));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 }
             }
 
             @Override
             public void onFailure(Call<List<Markers>> call, Throwable t) {
 
+            }
+        });
+    }
+
+    private void putIcon(final Markers mymarker) {
+        ImageView imageView=new ImageView(Principal.this);
+        Glide.with(Principal.this).load(JSONservice.URL+mymarker.getEetakemon().getImage()).asBitmap().into(new BitmapImageViewTarget(imageView){
+            @Override
+            protected void setResource(Bitmap resource) {
+                super.setResource(resource);
+                Marker marker1 = mMap.addMarker(new MarkerOptions().position(new LatLng(mymarker.getLat(), mymarker.getLng())).title(mymarker.getEetakemon().getName()).icon(BitmapDescriptorFactory.fromBitmap(resource)));
             }
         });
     }

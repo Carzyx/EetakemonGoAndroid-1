@@ -177,12 +177,14 @@ public class Fight extends AppCompatActivity {
     private void whoIam(){
         if(party.getCandidate1().getName()==user.getName()) {
             myEetakemon=party.getCandidate1().getEetakemons().get(0);
+            rivalEetakemon=party.getCandidate2().getEetakemons().get(0);
             iAmCandidate1=true;
 
         }
         else
         {
             myEetakemon=party.getCandidate2().getEetakemons().get(0);
+            rivalEetakemon=party.getCandidate1().getEetakemons().get(0);
             iAmCandidate1=true;
         }
     }

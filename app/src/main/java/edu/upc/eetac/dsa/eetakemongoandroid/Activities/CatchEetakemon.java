@@ -1,5 +1,6 @@
 package edu.upc.eetac.dsa.eetakemongoandroid.Activities;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -20,7 +21,7 @@ import edu.upc.eetac.dsa.eetakemongoandroid.Model.ValuesForActivites;
 import edu.upc.eetac.dsa.eetakemongoandroid.R;
 
 public class CatchEetakemon extends AppCompatActivity {
-
+    MediaPlayer mediaPlayer;
     private ProgressBar rivalEetakemonHealthProgessBar;
     private ProgressBar myEetakemonHealthProgessBar;
     private Eetakemon rivalEetakemon;
@@ -40,8 +41,16 @@ public class CatchEetakemon extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_captura);
-
+        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.Instrumental);
+        mediaPlayer.start();
         prepareAcitivty();
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mediaPlayer.stop();
+        mediaPlayer.release();
+
     }
 
     public void atacak(View view) {
