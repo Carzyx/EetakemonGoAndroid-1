@@ -41,7 +41,7 @@ public class CatchEetakemon extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_captura);
-        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.Instrumental);
+        //mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.Instrumental);
         mediaPlayer.start();
         prepareAcitivty();
     }

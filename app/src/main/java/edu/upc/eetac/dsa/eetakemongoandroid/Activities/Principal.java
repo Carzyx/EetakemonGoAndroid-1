@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -66,6 +67,7 @@ public class Principal extends AppCompatActivity
     private Marker marker;
     ImageView mifoto;
     private String token;
+    MediaPlayer mediaPlayer;
     private List<Markers> markers;
     private User user;
     double lat = 41.275603;
@@ -76,7 +78,7 @@ public class Principal extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_principal);
-
+        //mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.Instrumental);
         user = (User) getIntent().getSerializableExtra("User");
         token = getIntent().getStringExtra("Token");
 
@@ -278,7 +280,13 @@ public class Principal extends AppCompatActivity
 
         }
     };
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mediaPlayer.stop();
+        mediaPlayer.release();
 
+    }
     @Override
     protected void onActivityResult(int requestCode, final int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
