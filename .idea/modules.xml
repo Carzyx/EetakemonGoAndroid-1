@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/EetakemonGoAndroid.iml" filepath="$PROJECT_DIR$/EetakemonGoAndroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EetakemonGoAndroid-fce6dd3c8caf047f61d539a09ccec1989d18d8a0.iml" filepath="$PROJECT_DIR$/EetakemonGoAndroid-fce6dd3c8caf047f61d539a09ccec1989d18d8a0.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

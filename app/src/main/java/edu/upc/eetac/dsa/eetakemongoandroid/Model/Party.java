@@ -1,5 +1,6 @@
 package edu.upc.eetac.dsa.eetakemongoandroid.Model;
 
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -11,6 +12,9 @@ public class Party {
     private User candidate1;
     private User candidate2;
     private HashMap<String, Boolean> turnIndication;
+    private String atack;
+
+    private String candidateWiner;
 
     public User getCandidate1() {
         return candidate1;
@@ -35,5 +39,21 @@ public class Party {
 
     public void setTurnIndication(HashMap<String, Boolean> turnIndication) {
         this.turnIndication = turnIndication;
+    }
+
+    public String getAtack() {
+        return atack;
+    }
+
+    public void setAtack(String atack) {
+        this.atack = atack;
+    }
+
+    public String getCandidateWiner() {
+        return candidateWiner;
+    }
+
+    public void setCandidateWiner(String candidateWiner) {
+        this.candidateWiner = candidateWiner;
     }
 }

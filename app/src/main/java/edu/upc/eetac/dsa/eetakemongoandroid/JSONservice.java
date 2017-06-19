@@ -20,7 +20,7 @@ import retrofit2.http.Path;
 
 public interface JSONservice {
     String URL_Local="http://10.0.2.2:8080/";
-    String URL="http://10.193.21.167:8080/";
+    String URL="http://192.168.1.55:8080/";
     //User
     @POST("myapp/UserService/singIn")
     Call<User> SingIn(@Body User user);
@@ -51,6 +51,6 @@ public interface JSONservice {
     Call<Party>getParty(@Body User user,@Header("Authoritzation") String Autorization);
 
     @POST("myapp/GameService/doAtack")
-    Call<Party>doAtack(@Body Atack atack,@Header("Authoritzation") String Autorization);
+    Call<Party>doAtack(@Body Party party,@Header("Authoritzation") String Autorization);
 
 }

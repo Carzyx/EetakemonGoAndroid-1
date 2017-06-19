@@ -1,6 +1,5 @@
 package edu.upc.eetac.dsa.eetakemongoandroid.View;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -10,7 +9,6 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import edu.upc.eetac.dsa.eetakemongoandroid.JSONservice;
-import edu.upc.eetac.dsa.eetakemongoandroid.Model.Atack;
 import edu.upc.eetac.dsa.eetakemongoandroid.Model.Eetakemon;
 import edu.upc.eetac.dsa.eetakemongoandroid.R;
 
@@ -47,8 +45,4 @@ public class ViewEetakemon extends AppCompatActivity {
         atac4.setText(eetakemon.getAtacks().get(3).getName());
     }
 
-    private void onClick(Atack atack){
-        Intent intent=new Intent(ViewEetakemon.this,ViewAtack.class);
-        startActivity(intent);
-    }
 }

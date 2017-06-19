@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:background="@drawable/grass"
+    tools:background="@drawable/backgroundfight"
     tools:context="edu.upc.eetac.dsa.eetakemongoandroid.Activities.CatchEetakemon">
 
     <LinearLayout
